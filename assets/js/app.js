@@ -5,7 +5,9 @@
     .back-btn:hover{border-color:#d40000;color:#d40000;background:#fff8f8}
     .contact-section+.contact-section{margin-top:54px}.section-head.compact{margin-bottom:20px}.section-head.compact h2{font-size:clamp(25px,3vw,34px)}.secretary-block{margin-top:48px;padding-top:42px;border-top:1px solid #e4e7eb}
     .program-embed-card{margin-top:18px;padding:0;overflow:hidden}.program-embed-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px;border-bottom:1px solid #e4e7eb}.program-embed-head h2{margin:4px 0 0}.sheet-frame-wrap{background:#f7f7f8}.sheet-frame-wrap iframe{display:block;width:100%;height:650px;border:0;background:#fff}
-    @media(max-width:640px){.back-btn{margin-bottom:12px}.contact-section+.contact-section{margin-top:40px}.program-embed-head{display:block;padding:20px}.program-embed-head .btn{width:100%;margin-top:14px}.sheet-frame-wrap iframe{height:560px}}
+    .army-section{margin-top:56px;padding-top:42px;border-top:1px solid #e4e7eb}.army-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.army-card{position:relative;overflow:hidden}.army-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#3f4b5a}.army-label{display:inline-flex;padding:6px 9px;border-radius:999px;background:#f1f3f5;color:#3f4b5a;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.army-card h3{margin:14px 0 8px}.army-card p{color:#62666d}
+    .qr-section{background:#f7f7f8}.qr-panel{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}.qr-image-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.qr-image-card img{width:min(260px,75vw);height:auto;background:#fff;border-radius:18px;padding:14px;border:1px solid #e4e7eb;box-shadow:0 10px 30px rgba(20,20,20,.08)}.qr-image-card small{margin-top:12px;color:#62666d}.qr-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    @media(max-width:640px){.back-btn{margin-bottom:12px}.contact-section+.contact-section{margin-top:40px}.program-embed-head{display:block;padding:20px}.program-embed-head .btn{width:100%;margin-top:14px}.sheet-frame-wrap iframe{height:560px}.army-grid,.qr-panel{grid-template-columns:1fr}.qr-actions .btn{width:100%}}
   `;
   document.head.appendChild(extraStyle);
 
@@ -23,6 +25,30 @@
   }
   if(path==='faq.html'){
     nav?.querySelectorAll('a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='faq.html'));
+  }
+
+  if(path==='corsi.html'){
+    if(!document.querySelector('link[href="assets/css/course-cards.css"]')){
+      const style=document.createElement('link');
+      style.rel='stylesheet';
+      style.href='assets/css/course-cards.css';
+      document.head.appendChild(style);
+    }
+    const container=document.querySelector('main .section .container');
+    if(container && !document.getElementById('armyCourses')){
+      container.insertAdjacentHTML('beforeend',`<section class="army-section" id="armyCourses"><div class="section-head"><div><div class="kicker">Attività riservate</div><h2>Corsi per l’Esercito Italiano</h2></div><p>Attività formative riservate al personale dell’Esercito Italiano. Le iscrizioni sono curate dal Comando Militare Esercito “Puglia”.</p></div><div class="army-grid"><article class="card army-card"><span class="army-label">Riservato E.I.</span><h3>Corso Operatore Diritto Internazionale Umanitario (DIU)</h3><p><strong>21–24 settembre 2026</strong></p></article><article class="card army-card"><span class="army-label">Riservato E.I.</span><h3>Corso di Primo Soccorso</h3><p><strong>21–24 settembre 2026</strong></p></article></div></section>`);
+    }
+  }
+
+  if(path==='index.html' || path===''){
+    const quick=document.querySelector('.quick-grid');
+    if(quick && !quick.querySelector('a[href="faq.html"]')){
+      quick.insertAdjacentHTML('beforeend','<a class="quick-card" href="faq.html"><span class="ico">❓</span><b>FAQ</b><small>Risposte alle domande frequenti</small></a>');
+    }
+    const main=document.querySelector('main');
+    if(main && !document.getElementById('qrPortal')){
+      main.insertAdjacentHTML('beforeend',`<section class="section qr-section" id="qrPortal"><div class="container"><div class="qr-panel"><div><div class="kicker">Accesso rapido</div><h2>Porta il portale sempre con te</h2><p>Scansiona il QR code per aprire direttamente il portale del Campo da smartphone. Può essere utilizzato anche su badge, cartellonistica e materiale informativo.</p><div class="qr-actions"><a class="btn primary" href="https://gecriwebsites.github.io/campo-scuola-cri-puglia/">Apri il portale</a><a class="btn secondary" href="assets/img/qr-portale.svg" target="_blank" rel="noopener">Apri QR code</a></div></div><div class="card qr-image-card"><img src="assets/img/qr-portale.svg" alt="QR code del portale Campo Scuola CRI Puglia"><small>Campo Scuola CRI Puglia 2026</small></div></div></div></section>`);
+    }
   }
 
   if(path!=='index.html' && path!==''){
