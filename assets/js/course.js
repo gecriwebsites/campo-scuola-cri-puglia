@@ -28,6 +28,10 @@
     directorCard.hidden=false;
   }
 
+  const base=window.COURSE_PROGRAM_BASE||'';
+  const singleProgram=c.gid?`https://docs.google.com/spreadsheets/d/1cR5O5KClDyYp8bqPCWFhFE8_HgHIEeS1/edit?gid=${c.gid}#gid=${c.gid}`:'';
+  const embedProgram=c.gid?`https://docs.google.com/spreadsheets/d/1cR5O5KClDyYp8bqPCWFhFE8_HgHIEeS1/edit?rm=minimal&gid=${c.gid}&single=true#gid=${c.gid}`:'';
+
   const linksCard=document.getElementById('courseLinksCard');
   const links=document.getElementById('courseLinks');
   const addLink=(url,label,kind)=>{
@@ -40,7 +44,17 @@
   };
   addLink(c.gaia,'🌐 Evento su GAIA','gaia');
   addLink(c.whatsapp,'💬 Gruppo WhatsApp','whatsapp');
-  addLink(c.programma,'📊 Programma del corso','programma');
+  addLink(base,'📚 Programmi completi','programma');
+  addLink(singleProgram,'📊 Programma di questo corso','programma');
   addLink(c.meet,'🎥 Collegamento Google Meet','meet');
   if(links.children.length) linksCard.hidden=false;
+
+  const embedCard=document.getElementById('courseProgramEmbedCard');
+  const frame=document.getElementById('courseProgramFrame');
+  const openBtn=document.getElementById('openSingleProgram');
+  if(c.gid && embedCard && frame && openBtn){
+    frame.src=embedProgram;
+    openBtn.href=singleProgram;
+    embedCard.hidden=false;
+  }
 })();
