@@ -13,9 +13,21 @@
   if(btn&&nav){btn.addEventListener('click',()=>{nav.classList.toggle('open');btn.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false')});}
 
   const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+
+  if(nav && !nav.querySelector('a[href="faq.html"]')){
+    const faq=document.createElement('a');
+    faq.href='faq.html';
+    faq.textContent='FAQ';
+    const bando=nav.querySelector('a[href="bando.html"]');
+    if(bando) nav.insertBefore(faq,bando); else nav.appendChild(faq);
+  }
+  if(path==='faq.html'){
+    nav?.querySelectorAll('a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='faq.html'));
+  }
+
   if(path!=='index.html' && path!==''){
     const hero=document.querySelector('.page-hero .container');
-    if(hero){
+    if(hero && !hero.querySelector('.back-btn')){
       const back=document.createElement('button');
       back.type='button';
       back.className='back-btn';
