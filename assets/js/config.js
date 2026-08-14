@@ -13,6 +13,34 @@ window.CAMPO_CONFIG = {
       name: "Ilaria Altavilla",
       phone: "",
       email: "formazione@puglia.cri.it"
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Sabino Martiradonna",
+      phone: "3279440117",
+      email: ""
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Simone Diaco",
+      phone: "3791192419",
+      email: ""
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Lara Di Fonte",
+      phone: "3348096382",
+      email: ""
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Sonia Piserchia",
+      phone: "3474873551",
+      email: ""
     }
   ],
   webmaster: {
