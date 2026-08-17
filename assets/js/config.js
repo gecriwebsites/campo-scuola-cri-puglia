@@ -27,6 +27,20 @@ window.CAMPO_CONFIG = {
       name: "Simone Diaco",
       phone: "3791192419",
       email: ""
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Lara Di Fonte",
+      phone: "3348096382",
+      email: ""
+    },
+    {
+      group: "Segreteria del Campo",
+      role: "Segreteria",
+      name: "Maria Cristina Caldarola",
+      phone: "+393474580140",
+      email: ""
     }
   ],
   webmaster: {
