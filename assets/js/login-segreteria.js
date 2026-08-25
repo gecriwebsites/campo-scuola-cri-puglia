@@ -36,7 +36,7 @@
 
     const authorized = await isAuthorized(session);
     if (!authorized) {
-      await client.auth.signOut();
+      await client.auth.signOut({ scope: 'local' });
       setMessage('Questo account non è autorizzato ad accedere all’Area Segreteria.', 'error');
       return false;
     }
