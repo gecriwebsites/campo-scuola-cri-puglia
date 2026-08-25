@@ -9,6 +9,7 @@
   const loginMessage = document.getElementById('loginMessage');
   const togglePassword = document.getElementById('togglePassword');
 
+  const STATION_STORAGE_KEY = 'campo_scuola_segreteria_postazione';
   let client = null;
 
   function setMessage(message = '', type = '') {
@@ -88,6 +89,20 @@
       }
     });
 
+    // Entrare nella pagina di login significa iniziare un NUOVO accesso.
+    // Eliminiamo solo la sessione locale di questo browser/tab: le altre
+    // postazioni già collegate con lo stesso account non vengono disconnesse.
+    try {
+      await client.auth.signOut({ scope: 'local' });
+    } catch (_) {
+      // Nessuna sessione locale attiva: possiamo mostrare normalmente il login.
+    }
+
+    sessionStorage.removeItem(STATION_STORAGE_KEY);
+    loginEmail.value = '';
+    loginPassword.value = '';
+    setMessage();
+
     loginForm.addEventListener('submit', handleLogin);
 
     togglePassword.addEventListener('click', () => {
@@ -97,9 +112,6 @@
       togglePassword.setAttribute('aria-label', showing ? 'Mostra password' : 'Nascondi password');
     });
 
-    // La pagina di login viene sempre mostrata, anche se nel browser
-    // esiste già una sessione Supabase: l'accesso all'area operativa
-    // richiede sempre un'azione esplicita dell'operatore.
     loginEmail.focus();
   }
 
