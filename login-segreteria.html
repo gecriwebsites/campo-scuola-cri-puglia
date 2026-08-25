@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#d40000">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Accesso Area Segreteria | Campo Scuola CRI Puglia</title>
+  <meta name="description" content="Accesso riservato alla Segreteria del Campo Scuola CRI Puglia 2026">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/area-segreteria.css">
+</head>
+<body class="reserved-body login-page">
+  <header class="reserved-topbar login-topbar">
+    <div class="container reserved-topbar-inner">
+      <a class="reserved-brand" href="index.html" aria-label="Torna al portale pubblico">
+        <img src="assets/img/logo-cri-puglia.png" alt="Croce Rossa Italiana - Comitato Regionale Puglia">
+        <div>
+          <strong>Area Riservata Segreteria</strong>
+          <span>Campo Scuola CRI Puglia 2026</span>
+        </div>
+      </a>
+      <a class="reserved-public-link" href="index.html">← Portale pubblico</a>
+    </div>
+  </header>
+
+  <main class="reserved-main login-main">
+    <section class="container auth-layout" aria-labelledby="loginTitle">
+      <div class="auth-intro">
+        <div class="kicker">Accesso riservato</div>
+        <h1 id="loginTitle">Segreteria del Campo</h1>
+        <p>Accedi con le credenziali autorizzate per entrare nell'area operativa condivisa della Segreteria.</p>
+        <div class="auth-feature-list" aria-label="Funzioni dell'area riservata">
+          <span>● Accredito e presenze</span>
+          <span>● Gestione persone e turni</span>
+          <span>● Pernottamenti e pasti</span>
+          <span>● Mezzi e movimentazioni</span>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-head">
+          <span class="auth-lock" aria-hidden="true">🔐</span>
+          <div>
+            <h2>Accedi</h2>
+            <p>La sessione resterà disponibile su questa postazione fino al logout.</p>
+          </div>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <label class="field-label" for="loginEmail">Email</label>
+          <input class="field-input" id="loginEmail" name="email" type="email" autocomplete="username" required>
+
+          <label class="field-label" for="loginPassword">Password</label>
+          <div class="password-wrap">
+            <input class="field-input" id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+            <button id="togglePassword" class="password-toggle" type="button" aria-label="Mostra password">Mostra</button>
+          </div>
+
+          <button id="loginButton" class="btn primary auth-submit" type="submit">Accedi all'Area Segreteria</button>
+          <div id="loginMessage" class="form-message" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/login-segreteria.js"></script>
+</body>
+</html>
