@@ -6,16 +6,17 @@
   <meta name="theme-color" content="#d40000">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <title>Area Segreteria | Campo Scuola CRI Puglia</title>
-  <meta name="description" content="Area operativa riservata della Segreteria del Campo Scuola CRI Puglia 2026">
+  <meta name="description" content="Area operativa riservata del Campo Scuola CRI Puglia 2026">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/area-segreteria.css">
+  <link rel="stylesheet" href="assets/css/area-segreteria-3d3c.css">
 </head>
 <body class="reserved-body app-page">
   <header class="reserved-topbar app-topbar">
     <div class="container reserved-topbar-inner">
-      <a class="reserved-brand" href="area-segreteria.html" aria-label="Area Segreteria">
+      <a class="reserved-brand" href="area-segreteria.html" aria-label="Area riservata">
         <img src="assets/img/logo-cri-puglia.png" alt="Croce Rossa Italiana - Comitato Regionale Puglia">
-        <div><strong>Area Segreteria</strong><span>Campo Scuola CRI Puglia 2026</span></div>
+        <div><strong id="reservedAreaTitle">Area Segreteria</strong><span>Campo Scuola CRI Puglia 2026</span></div>
       </a>
       <div class="reserved-header-actions">
         <a class="reserved-public-link" href="index.html">Portale pubblico</a>
@@ -23,10 +24,10 @@
       </div>
     </div>
 
-    <div class="reserved-statusbar" aria-label="Stato Area Segreteria">
+    <div class="reserved-statusbar" aria-label="Stato area riservata">
       <div class="container reserved-statusbar-inner">
         <button id="stationBadge" class="mini-status mini-status-button" type="button" title="Cambia postazione"><span class="mini-status-label">Postazione</span><strong id="stationName">Da selezionare</strong></button>
-        <div class="mini-status" id="onlineBadge" title="Postazioni operative connesse"><span class="mini-status-label">Postazioni online</span><strong id="onlineStations">0/5</strong></div>
+        <div class="mini-status" id="onlineBadge" title="Postazioni operative connesse"><span class="mini-status-label">Postazioni online</span><strong id="onlineStations">0/8</strong></div>
         <div class="mini-status" title="Livello di accesso dell'account"><span class="mini-status-label">Accesso</span><strong id="accessRole">—</strong></div>
         <div class="mini-status system-status" id="systemBadge" title="Stato della connessione realtime"><span id="systemDot" class="system-dot waiting" aria-hidden="true"></span><span class="mini-status-label">Sistema</span><strong id="connectionState">Connessione…</strong></div>
       </div>
@@ -34,7 +35,7 @@
   </header>
 
   <main class="reserved-main app-main">
-    <section class="container reserved-app">
+    <section id="standardWorkspace" class="container reserved-app standard-workspace" hidden>
       <div class="app-shell-head">
         <div>
           <div class="kicker">Area operativa</div>
@@ -79,14 +80,14 @@
 
         <div class="modules-head modules-head-first">
           <div><div class="kicker">Gestione Campo</div><h2>Moduli operativi</h2></div>
-          <p>I primi moduli sono già operativi. Gli altri verranno collegati progressivamente alla stessa base dati.</p>
+          <p>I moduli condividono la stessa base dati e vengono sincronizzati tra le postazioni.</p>
         </div>
         <div class="module-grid">
           <button class="module-card module-button active-module" type="button" data-open-view="persone"><span>👥</span><div><strong>Persone</strong><small>Anagrafica, ricerca e schede individuali</small><em>Operativo</em></div></button>
-          <button class="module-card module-button active-module" type="button" data-open-view="accreditamento"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge e gadget</small><em>Operativo</em></div></button>
+          <button class="module-card module-button active-module" type="button" data-open-view="accreditamento"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge, gadget e QR</small><em>Operativo</em></div></button>
           <article class="module-card"><span>🗓️</span><div><strong>Turni</strong><small>Disponibilità e assegnazioni</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>⛺</span><div><strong>Pernottamenti</strong><small>Tende e posti letto</small><em>Da attivare</em></div></article>
-          <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Previsioni e supporto cucina</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Ticket e previsioni cucina</small><em>Predisposto</em></div></article>
           <article class="module-card"><span>🚑</span><div><strong>Mezzi</strong><small>Attivazioni, autisti e movimenti</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>📥</span><div><strong>Importa Excel</strong><small>Anteprima, verifica e importazione</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>📊</span><div><strong>Situazione Campo</strong><small>Presenze e indicatori operativi</small><em>In sviluppo</em></div></article>
@@ -95,7 +96,7 @@
 
       <section class="app-view" data-view-panel="persone" hidden>
         <div class="view-heading">
-          <div><div class="kicker">Anagrafica</div><h2>Persone</h2><p>Archivio unico di discenti, docenti, staff e ospiti.</p></div>
+          <div><div class="kicker">Anagrafica</div><h2>Persone</h2><p>Archivio unico con tipologie multiple, QR e dati operativi.</p></div>
           <button id="addPersonButton" class="btn primary" type="button">＋ Nuova persona</button>
         </div>
         <div class="data-toolbar">
@@ -118,11 +119,15 @@
 
       <section class="app-view" data-view-panel="accreditamento" hidden>
         <div class="view-heading accreditation-heading">
-          <div><div class="kicker">Ingresso Campo</div><h2>Accreditamento</h2><p>Ricerca rapida e registrazione di entrata, badge e gadget.</p></div>
+          <div><div class="kicker">Ingresso Campo</div><h2>Accreditamento</h2><p>Ricerca rapida, entrata/uscita, badge, gadget e scansione QR.</p></div>
           <div class="accreditation-live"><span class="live-dot"></span><strong id="accreditationPresentCount">— presenti</strong></div>
         </div>
         <div class="accredit-search-panel">
           <div class="accredit-search"><span>⌕</span><input id="accreditSearch" type="search" placeholder="Inizia a digitare nome, cognome, CF, telefono o badge…" autocomplete="off"></div>
+          <div class="scan-actions">
+            <button id="scanEntryButton" class="scan-action entry" type="button">▣ QR ENTRATA</button>
+            <button id="scanExitButton" class="scan-action exit" type="button">▣ QR USCITA</button>
+          </div>
           <div class="accredit-filters">
             <button class="filter-pill active" type="button" data-accredit-filter="all">Tutti</button>
             <button class="filter-pill" type="button" data-accredit-filter="outside">Da accreditare</button>
@@ -133,37 +138,55 @@
         <div id="accreditEmpty" class="empty-state" hidden>Nessun risultato.</div>
       </section>
     </section>
+
+    <section id="kitchenWorkspace" class="container kitchen-workspace" hidden>
+      <div class="kitchen-head">
+        <div><div class="kicker">Area dedicata</div><h1>Cucina Campo</h1><p>Gestione ticket pasti e segnalazioni alimentari, senza accesso ai dati non necessari.</p></div>
+        <div class="kitchen-head-controls"><input id="kitchenDate" class="kitchen-date" type="date"><button id="kitchenRefresh" class="kitchen-refresh" type="button" title="Aggiorna">↻</button></div>
+      </div>
+      <div id="kitchenRealtimeState" class="kitchen-realtime">Realtime in attivazione…</div>
+
+      <div class="meal-dashboard">
+        <article class="meal-summary-card colazione"><span class="meal-label">Ticket</span><h2>Colazione</h2><div class="meal-stat-row"><div class="meal-stat"><small>Previsti</small><strong id="breakfastExpected">0</strong></div><div class="meal-stat"><small>Usati</small><strong id="breakfastUsed">0</strong></div><div class="meal-stat"><small>Restanti</small><strong id="breakfastRemaining">0</strong></div></div></article>
+        <article class="meal-summary-card pranzo"><span class="meal-label">Ticket</span><h2>Pranzo</h2><div class="meal-stat-row"><div class="meal-stat"><small>Previsti</small><strong id="lunchExpected">0</strong></div><div class="meal-stat"><small>Usati</small><strong id="lunchUsed">0</strong></div><div class="meal-stat"><small>Restanti</small><strong id="lunchRemaining">0</strong></div></div></article>
+        <article class="meal-summary-card cena"><span class="meal-label">Ticket</span><h2>Cena</h2><div class="meal-stat-row"><div class="meal-stat"><small>Previsti</small><strong id="dinnerExpected">0</strong></div><div class="meal-stat"><small>Usati</small><strong id="dinnerUsed">0</strong></div><div class="meal-stat"><small>Restanti</small><strong id="dinnerRemaining">0</strong></div></div></article>
+      </div>
+
+      <div class="kitchen-tools">
+        <div class="kitchen-search-box"><label for="kitchenSearch">Ricerca manuale</label><div class="kitchen-search-input"><span>⌕</span><input id="kitchenSearch" type="search" placeholder="Nome, cognome o numero badge…" autocomplete="off"></div><div id="kitchenSearchResults" class="kitchen-search-results"></div></div>
+        <button id="kitchenScanButton" class="kitchen-scan-button" type="button">▣ Scansiona QR personale</button>
+      </div>
+
+      <section id="kitchenPersonPanel" class="kitchen-person-panel" hidden>
+        <div class="kitchen-person-head"><div><div class="panel-kicker">Persona selezionata</div><h2 id="kitchenPersonName">—</h2><p id="kitchenPersonBadge">—</p></div></div>
+        <div id="kitchenDietary" class="dietary-alert" hidden></div>
+        <div id="kitchenTickets" class="kitchen-tickets"></div>
+        <div class="kitchen-privacy-note">La postazione Cucina visualizza esclusivamente le informazioni necessarie alla gestione dei pasti.</div>
+      </section>
+    </section>
   </main>
 
   <div id="stationModal" class="station-modal" hidden>
     <div class="station-modal-backdrop" aria-hidden="true"></div>
     <section class="station-modal-card" role="dialog" aria-modal="true" aria-labelledby="stationModalTitle">
       <div class="station-modal-icon" aria-hidden="true">🖥️</div><div class="kicker">Postazione operativa</div><h2 id="stationModalTitle">Seleziona la postazione</h2>
-      <p>Sono disponibili cinque postazioni. Quelle già utilizzate da un altro operatore non possono essere selezionate.</p>
-      <form id="stationForm">
-        <label class="field-label" for="stationSelect">Postazione</label>
-        <select id="stationSelect" class="field-input station-select" required><option value="">Seleziona…</option></select>
-        <div id="stationAvailability" class="station-availability">Verifica disponibilità in corso…</div>
-        <div id="stationMessage" class="form-message" role="status" aria-live="polite"></div>
-        <div class="station-modal-actions"><button id="cancelStationButton" class="btn secondary" type="button" hidden>Annulla</button><button id="activateStationButton" class="btn primary" type="submit">Entra nella postazione</button></div>
-      </form>
+      <p>Le postazioni disponibili dipendono dal profilo di accesso. Una postazione già occupata non può essere selezionata da un'altra sessione.</p>
+      <form id="stationForm"><label class="field-label" for="stationSelect">Postazione</label><select id="stationSelect" class="field-input station-select" required><option value="">Seleziona…</option></select><div id="stationAvailability" class="station-availability">Verifica disponibilità in corso…</div><div id="stationMessage" class="form-message" role="status" aria-live="polite"></div><div class="station-modal-actions"><button id="cancelStationButton" class="btn secondary" type="button" hidden>Annulla</button><button id="activateStationButton" class="btn primary" type="submit">Entra nella postazione</button></div></form>
     </section>
   </div>
 
   <div id="personModal" class="person-modal" hidden>
     <div class="person-modal-backdrop" data-close-person aria-hidden="true"></div>
     <section class="person-panel" role="dialog" aria-modal="true" aria-labelledby="personModalTitle">
-      <header class="person-panel-head">
-        <div><div id="personPresencePill" class="presence-pill">—</div><h2 id="personModalTitle">Scheda persona</h2><p id="personModalSubtitle"></p></div>
-        <button class="panel-close" type="button" data-close-person aria-label="Chiudi">×</button>
-      </header>
+      <header class="person-panel-head"><div><div id="personPresencePill" class="presence-pill">—</div><h2 id="personModalTitle">Scheda persona</h2><p id="personModalSubtitle"></p></div><button class="panel-close" type="button" data-close-person aria-label="Chiudi">×</button></header>
       <div id="personWorkNotice" class="work-notice" hidden></div>
       <div class="person-panel-body">
         <form id="personForm" class="person-form">
           <input id="personId" type="hidden"><input id="personUpdatedAt" type="hidden">
           <div class="form-section-title">Anagrafica</div>
           <div class="form-grid two"><label>Nome<input id="personNome" class="field-input" required></label><label>Cognome<input id="personCognome" class="field-input" required></label></div>
-          <div class="form-grid two"><label>Codice fiscale<input id="personCf" class="field-input" autocomplete="off"></label><label>Tipologia<select id="personTipologia" class="field-input"><option value="discente">Discente</option><option value="docente">Docente</option><option value="staff">Staff</option><option value="ospite">Ospite</option><option value="altro">Altro</option></select></label></div>
+          <div class="form-grid two"><label>Codice fiscale<input id="personCf" class="field-input" autocomplete="off"></label><label>Settore alloggio<select id="personHousingSector" class="field-input"><option value="da_definire">Da definire</option><option value="uomo">Uomo</option><option value="donna">Donna</option></select></label></div>
+          <label>Tipologie<div id="personTypes" class="type-checks"></div></label>
           <div class="form-grid two"><label>Telefono<input id="personTelefono" class="field-input" inputmode="tel"></label><label>Email<input id="personEmail" class="field-input" type="email"></label></div>
           <div class="form-grid two"><label>Comitato<input id="personComitato" class="field-input"></label><label>Regione<input id="personRegione" class="field-input"></label></div>
           <div class="form-grid two"><label>Componente CRI<input id="personComponente" class="field-input"></label><label>Numero badge<input id="personBadgeNumber" class="field-input" autocomplete="off"></label></div>
@@ -172,25 +195,19 @@
           <div class="form-grid two"><label>Nome contatto<input id="personIceName" class="field-input"></label><label>Telefono ICE<input id="personIcePhone" class="field-input" inputmode="tel"></label></div>
 
           <div class="form-section-title">Campo</div>
-          <div class="switch-grid">
-            <label class="switch-row"><input id="personBadgeDelivered" type="checkbox"><span><b>Badge consegnato</b><small>Materiale di accredito consegnato</small></span></label>
-            <label class="switch-row"><input id="personGadgetDelivered" type="checkbox"><span><b>Gadget consegnato</b><small>Gadget del Campo consegnato</small></span></label>
-            <label class="switch-row"><input id="personPernotto" type="checkbox"><span><b>Pernottamento</b><small>Persona prevista in alloggio</small></span></label>
-          </div>
+          <div class="switch-grid"><label class="switch-row"><input id="personBadgeDelivered" type="checkbox"><span><b>Badge consegnato</b><small>Materiale di accredito consegnato</small></span></label><label class="switch-row"><input id="personGadgetDelivered" type="checkbox"><span><b>Gadget consegnato</b><small>Gadget del Campo consegnato</small></span></label><label class="switch-row"><input id="personPernotto" type="checkbox"><span><b>Pernottamento</b><small>Persona prevista in alloggio</small></span></label><label class="switch-row"><input id="personQrActive" type="checkbox"><span><b>QR attivo</b><small>Abilita scansione per accessi e pasti</small></span></label></div>
           <div class="form-grid two"><label>Arrivo previsto<input id="personArrival" class="field-input" type="date"></label><label>Partenza prevista<input id="personDeparture" class="field-input" type="date"></label></div>
           <label>Note<textarea id="personNotes" class="field-textarea" rows="3"></textarea></label>
           <div id="personCourses" class="course-chips" hidden></div>
+
+          <div class="qr-card"><div class="qr-card-head"><div><small>QR personale</small><h4>Identificativo operativo</h4></div><button id="printQrButton" class="row-action" type="button">Stampa QR</button></div><div class="qr-preview"><div id="personQrBox" class="qr-box"></div><div class="qr-meta"><span id="personQrStatus">—</span><span>Il QR contiene solo un token casuale e non dati personali.</span></div></div></div>
+
           <div id="personFormMessage" class="form-message" role="status" aria-live="polite"></div>
           <div class="person-save-row"><button id="savePersonButton" class="btn primary" type="submit">Salva modifiche</button></div>
+          <div class="danger-zone"><button id="deletePersonButton" class="danger-button" type="button">Elimina persona</button></div>
         </form>
 
-        <aside class="accredit-side">
-          <div class="accredit-side-head"><div class="panel-kicker">Accreditamento</div><h3>Stato operativo</h3></div>
-          <div class="current-state"><span>Presenza</span><strong id="personPresenceState">—</strong><small id="personLastMovement">Nessun movimento registrato</small></div>
-          <button id="checkinButton" class="big-action success-action" type="button">✓ Registra ENTRATA</button>
-          <button id="checkoutButton" class="big-action danger-action" type="button">↗ Registra USCITA</button>
-          <div class="accredit-help">L'operazione viene salvata nello storico e aggiornata in tempo reale sulle altre postazioni.</div>
-        </aside>
+        <aside class="accredit-side"><div class="accredit-side-head"><div class="panel-kicker">Accreditamento</div><h3>Stato operativo</h3></div><div class="current-state"><span>Presenza</span><strong id="personPresenceState">—</strong><small id="personLastMovement">Nessun movimento registrato</small></div><button id="checkinButton" class="big-action success-action" type="button">✓ Registra ENTRATA</button><button id="checkoutButton" class="big-action danger-action" type="button">↗ Registra USCITA</button><div class="accredit-help">L'operazione viene salvata nello storico e aggiornata in tempo reale sulle altre postazioni.</div></aside>
       </div>
     </section>
   </div>
@@ -198,10 +215,11 @@
   <div id="newPersonModal" class="person-modal" hidden>
     <div class="person-modal-backdrop" data-close-new-person aria-hidden="true"></div>
     <section class="new-person-card" role="dialog" aria-modal="true" aria-labelledby="newPersonTitle">
-      <header class="person-panel-head"><div><div class="kicker">Nuova anagrafica</div><h2 id="newPersonTitle">Aggiungi persona</h2><p>Inserisci almeno nome e cognome.</p></div><button class="panel-close" type="button" data-close-new-person aria-label="Chiudi">×</button></header>
+      <header class="person-panel-head"><div><div class="kicker">Nuova anagrafica</div><h2 id="newPersonTitle">Aggiungi persona</h2><p>Inserisci almeno nome, cognome e una tipologia.</p></div><button class="panel-close" type="button" data-close-new-person aria-label="Chiudi">×</button></header>
       <form id="newPersonForm" class="new-person-form">
         <div class="form-grid two"><label>Nome<input id="newNome" class="field-input" required></label><label>Cognome<input id="newCognome" class="field-input" required></label></div>
-        <div class="form-grid two"><label>Codice fiscale<input id="newCf" class="field-input"></label><label>Tipologia<select id="newTipologia" class="field-input"><option value="discente">Discente</option><option value="docente">Docente</option><option value="staff">Staff</option><option value="ospite">Ospite</option><option value="altro">Altro</option></select></label></div>
+        <div class="form-grid two"><label>Codice fiscale<input id="newCf" class="field-input"></label><label>Settore alloggio<select id="newHousingSector" class="field-input"><option value="da_definire">Da definire</option><option value="uomo">Uomo</option><option value="donna">Donna</option></select></label></div>
+        <label>Tipologie<div id="newPersonTypes" class="type-checks"></div></label>
         <div class="form-grid two"><label>Telefono<input id="newTelefono" class="field-input"></label><label>Email<input id="newEmail" class="field-input" type="email"></label></div>
         <div class="form-grid two"><label>Comitato<input id="newComitato" class="field-input"></label><label>Regione<input id="newRegione" class="field-input"></label></div>
         <div id="newPersonMessage" class="form-message"></div>
@@ -210,11 +228,20 @@
     </section>
   </div>
 
+  <div id="qrScannerModal" class="qr-scanner-modal" hidden>
+    <div class="qr-scanner-backdrop" data-close-qr-scanner aria-hidden="true"></div>
+    <section class="qr-scanner-card" role="dialog" aria-modal="true" aria-labelledby="qrScannerTitle"><div class="qr-scanner-head"><div><div class="kicker">Scanner</div><h2 id="qrScannerTitle">Scansiona QR</h2><p id="qrScannerSubtitle">Inquadra il QR personale.</p></div><button class="qr-scanner-close" type="button" data-close-qr-scanner aria-label="Chiudi">×</button></div><div id="qrScannerReader" class="qr-reader"></div></section>
+  </div>
+
   <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/area-segreteria.js"></script>
+  <script src="assets/js/qr-scanner.js"></script>
   <script src="assets/js/gestione-segreteria.js"></script>
+  <script src="assets/js/cucina-segreteria.js"></script>
 </body>
 </html>
