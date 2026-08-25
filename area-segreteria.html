@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/area-segreteria.css">
   <link rel="stylesheet" href="assets/css/area-segreteria-3d3c.css">
+  <link rel="stylesheet" href="assets/css/pasti-segreteria.css">
 </head>
 <body class="reserved-body app-page">
   <header class="reserved-topbar app-topbar">
@@ -46,6 +47,7 @@
           <button class="app-nav-btn active" type="button" data-view="dashboard">Dashboard</button>
           <button class="app-nav-btn" type="button" data-view="persone">Persone</button>
           <button class="app-nav-btn" type="button" data-view="accreditamento">Accreditamento</button>
+          <button class="app-nav-btn" type="button" data-view="pasti">Pasti</button>
         </nav>
       </div>
 
@@ -87,7 +89,7 @@
           <button class="module-card module-button active-module" type="button" data-open-view="accreditamento"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge, gadget e QR</small><em>Operativo</em></div></button>
           <article class="module-card"><span>🗓️</span><div><strong>Turni</strong><small>Disponibilità e assegnazioni</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>⛺</span><div><strong>Pernottamenti</strong><small>Tende e posti letto</small><em>Da attivare</em></div></article>
-          <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Ticket e previsioni cucina</small><em>Predisposto</em></div></article>
+          <button class="module-card module-button active-module" type="button" data-open-view="pasti"><span>🍽️</span><div><strong>Pasti</strong><small>Ticket individuali e previsioni cucina</small><em>Operativo</em></div></button>
           <article class="module-card"><span>🚑</span><div><strong>Mezzi</strong><small>Attivazioni, autisti e movimenti</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>📥</span><div><strong>Importa Excel</strong><small>Anteprima, verifica e importazione</small><em>Da attivare</em></div></article>
           <article class="module-card"><span>📊</span><div><strong>Situazione Campo</strong><small>Presenze e indicatori operativi</small><em>In sviluppo</em></div></article>
@@ -136,6 +138,52 @@
         </div>
         <div id="accreditList" class="accredit-list"></div>
         <div id="accreditEmpty" class="empty-state" hidden>Nessun risultato.</div>
+      </section>
+
+      <section class="app-view meals-admin-view" data-view-panel="pasti" hidden>
+        <div class="meals-admin-head">
+          <div><div class="kicker">Gestione pasti</div><h2>Ticket e previsioni</h2><p>Assegna Colazione, Pranzo e Cena per persona. Ogni modifica è sincronizzata con la Cucina.</p></div>
+          <div id="mealsRealtimeState" class="meals-realtime">Realtime in attivazione…</div>
+        </div>
+
+        <section class="meals-summary-panel">
+          <div class="meals-summary-top"><div><div class="panel-kicker">Situazione giornaliera</div><h3>Riepilogo Cucina</h3></div><input id="mealsSummaryDate" class="meals-summary-date" type="date" min="2026-09-16" max="2026-09-30"></div>
+          <div class="meals-summary-grid">
+            <article class="meal-admin-summary colazione"><small>Ticket</small><h4>Colazione</h4><div class="meal-admin-summary-values"><span><em>Previsti</em><strong id="mealAdminBreakfastExpected">0</strong></span><span><em>Usati</em><strong id="mealAdminBreakfastUsed">0</strong></span><span><em>Restanti</em><strong id="mealAdminBreakfastRemaining">0</strong></span></div></article>
+            <article class="meal-admin-summary pranzo"><small>Ticket</small><h4>Pranzo</h4><div class="meal-admin-summary-values"><span><em>Previsti</em><strong id="mealAdminLunchExpected">0</strong></span><span><em>Usati</em><strong id="mealAdminLunchUsed">0</strong></span><span><em>Restanti</em><strong id="mealAdminLunchRemaining">0</strong></span></div></article>
+            <article class="meal-admin-summary cena"><small>Ticket</small><h4>Cena</h4><div class="meal-admin-summary-values"><span><em>Previsti</em><strong id="mealAdminDinnerExpected">0</strong></span><span><em>Usati</em><strong id="mealAdminDinnerUsed">0</strong></span><span><em>Restanti</em><strong id="mealAdminDinnerRemaining">0</strong></span></div></article>
+          </div>
+        </section>
+
+        <div class="meals-admin-grid">
+          <section class="meal-people-panel">
+            <div class="meal-panel-head"><div class="panel-kicker">Anagrafica</div><h3>Seleziona persona</h3><p>Ricerca per nome, cognome, CF, badge o Comitato.</p></div>
+            <div class="meal-person-search"><span>⌕</span><input id="mealPersonSearch" type="search" placeholder="Cerca persona…" autocomplete="off"></div>
+            <div id="mealPersonCount" class="meal-person-count">0 persone</div>
+            <div id="mealPersonList" class="meal-person-list"></div>
+          </section>
+
+          <section class="meal-calendar-panel">
+            <div id="mealEmptySelection" class="meal-empty-selection">Seleziona una persona per gestire i ticket del Campo.</div>
+            <div id="mealSelectedPanel" hidden>
+              <div class="meal-selected-head"><div><div class="panel-kicker">Ticket individuali</div><h3 id="mealSelectedPersonName">—</h3><p id="mealSelectedPersonMeta">—</p></div></div>
+              <div id="mealSelectedDietary" class="meal-dietary-warning" hidden></div>
+              <div class="meal-range-box">
+                <div class="meal-range-row">
+                  <label>Dal<input id="mealRangeFrom" type="date" min="2026-09-16" max="2026-09-30"></label>
+                  <label>Al<input id="mealRangeTo" type="date" min="2026-09-16" max="2026-09-30"></label>
+                  <button id="mealUsePersonPeriod" class="row-action" type="button">Usa arrivo/partenza</button>
+                </div>
+                <div class="meal-range-actions"><button id="mealAssignRange" class="assign" type="button">✓ Assegna tutti i pasti del periodo</button><button id="mealRemoveRange" class="remove" type="button">Rimuovi ticket del periodo</button></div>
+                <div id="mealBulkState" class="meal-bulk-state"></div>
+              </div>
+              <div class="meal-calendar-legend"><span><i class="meal-legend-dot"></i> Non previsto</span><span><i class="meal-legend-dot assigned"></i> Previsto</span><span><i class="meal-legend-dot used"></i> Già utilizzato</span></div>
+              <div class="meal-calendar-wrap">
+                <table class="meal-calendar"><thead><tr><th>Data</th><th>Colazione</th><th>Pranzo</th><th>Cena</th></tr></thead><tbody id="mealCalendarBody"></tbody></table>
+              </div>
+            </div>
+          </section>
+        </div>
       </section>
     </section>
 
@@ -242,6 +290,7 @@
   <script src="assets/js/area-segreteria.js"></script>
   <script src="assets/js/qr-scanner.js"></script>
   <script src="assets/js/gestione-segreteria.js"></script>
+  <script src="assets/js/pasti-segreteria.js"></script>
   <script src="assets/js/cucina-segreteria.js"></script>
 </body>
 </html>
