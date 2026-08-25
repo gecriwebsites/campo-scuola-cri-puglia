@@ -1,4 +1,8 @@
 window.CAMPO_CONFIG = {
+  supabase: {
+    url: "https://blwxfpyhhoyzmvkmgjqe.supabase.co",
+    publishableKey: "sb_publishable_epl7k8BwDO31aIYqyIpH3g_0YWrovA3"
+  },
   contacts: [
     {
       group: "Direzione / Delegati",
