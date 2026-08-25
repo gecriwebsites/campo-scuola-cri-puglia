@@ -83,7 +83,7 @@
       .maybeSingle();
 
     if (error || !data || !data.attivo) {
-      await client.auth.signOut();
+      await client.auth.signOut({ scope: 'local' });
       location.replace('login-segreteria.html');
       return null;
     }
@@ -311,7 +311,7 @@
         try { await client.removeChannel(presenceChannel); } catch (_) {}
       }
       sessionStorage.removeItem(STATION_STORAGE_KEY);
-      await client.auth.signOut();
+      await client.auth.signOut({ scope: 'local' });
     } finally {
       location.replace('login-segreteria.html');
     }
