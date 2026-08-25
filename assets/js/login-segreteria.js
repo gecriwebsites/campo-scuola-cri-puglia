@@ -97,8 +97,10 @@
       togglePassword.setAttribute('aria-label', showing ? 'Mostra password' : 'Nascondi password');
     });
 
-    const { data: { session }, error } = await client.auth.getSession();
-    if (!error && session) await goToReservedArea(session);
+    // La pagina di login viene sempre mostrata, anche se nel browser
+    // esiste già una sessione Supabase: l'accesso all'area operativa
+    // richiede sempre un'azione esplicita dell'operatore.
+    loginEmail.focus();
   }
 
   document.addEventListener('DOMContentLoaded', init);
