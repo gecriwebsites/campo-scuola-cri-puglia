@@ -19,13 +19,30 @@
   const cancelStationButton = document.getElementById('cancelStationButton');
   const activateStationButton = document.getElementById('activateStationButton');
 
-  const STATIONS = [
+  const ALL_STATIONS = [
+    'Admin',
+    'Referente Segreteria',
+    'Cucina',
     'Segreteria 1',
     'Segreteria 2',
     'Segreteria 3',
     'Segreteria 4',
     'Segreteria 5'
   ];
+
+  const STATIONS_BY_ROLE = {
+    admin: ['Admin'],
+    cucina: ['Cucina'],
+    segreteria: [
+      'Referente Segreteria',
+      'Segreteria 1',
+      'Segreteria 2',
+      'Segreteria 3',
+      'Segreteria 4',
+      'Segreteria 5'
+    ],
+    sola_lettura: []
+  };
 
   const STATION_STORAGE_KEY = 'campo_scuola_segreteria_postazione';
   const INSTANCE_STORAGE_KEY = 'campo_scuola_segreteria_instance';
@@ -59,6 +76,10 @@
       cucina: 'Cucina'
     };
     return labels[role] || role || 'Segreteria';
+  }
+
+  function allowedStations() {
+    return STATIONS_BY_ROLE[currentProfile?.ruolo] || [];
   }
 
   function setStationMessage(message = '', type = '') {
@@ -108,7 +129,7 @@
   function occupiedStations() {
     const occupied = new Set();
     presenceEntries().forEach(entry => {
-      if (STATIONS.includes(entry.station_name)) occupied.add(entry.station_name);
+      if (ALL_STATIONS.includes(entry.station_name)) occupied.add(entry.station_name);
     });
     return occupied;
   }
@@ -116,7 +137,7 @@
   function renderPresence() {
     const occupied = occupiedStations();
     const names = [...occupied].sort((a, b) => a.localeCompare(b, 'it'));
-    onlineStations.textContent = `${occupied.size}/5`;
+    onlineStations.textContent = `${occupied.size}/${ALL_STATIONS.length}`;
     onlineBadge.title = names.length
       ? `Online: ${names.join(' · ')}`
       : 'Nessuna postazione operativa connessa';
@@ -127,10 +148,11 @@
   function renderStationOptions() {
     if (!stationSelect) return;
 
+    const stations = allowedStations();
     const previousValue = stationSelect.value || currentStation || '';
     stationSelect.innerHTML = '<option value="">Seleziona…</option>';
 
-    STATIONS.forEach(name => {
+    stations.forEach(name => {
       const option = document.createElement('option');
       option.value = name;
 
@@ -151,19 +173,34 @@
       stationSelect.value = previousValue;
     }
 
-    const freeCount = STATIONS.filter(name => !occupiedByOther(name) && name !== currentStation).length;
-    stationAvailability.textContent = currentStation
-      ? `${freeCount} postazioni libere oltre a quella attuale.`
-      : `${freeCount} postazioni disponibili su 5.`;
+    const freeCount = stations.filter(name => !occupiedByOther(name) && name !== currentStation).length;
+    if (stations.length === 1) {
+      stationAvailability.textContent = occupiedByOther(stations[0])
+        ? `${stations[0]} è attualmente occupata da un'altra sessione.`
+        : `${stations[0]} è assegnata automaticamente a questo account.`;
+    } else {
+      stationAvailability.textContent = currentStation
+        ? `${freeCount} postazioni disponibili oltre a quella attuale.`
+        : `${freeCount} postazioni disponibili per questo account.`;
+    }
   }
 
   function openStationModal(message = '') {
+    const stations = allowedStations();
     renderStationOptions();
     setStationMessage(message, message ? 'error' : '');
     cancelStationButton.hidden = !currentStation;
     stationSelect.value = currentStation || '';
     stationModal.hidden = false;
     document.body.classList.add('modal-open');
+
+    if (stations.length === 1) {
+      stationSelect.value = stations[0];
+      stationSelect.disabled = true;
+    } else {
+      stationSelect.disabled = false;
+    }
+
     setTimeout(() => stationSelect.focus(), 30);
   }
 
@@ -188,7 +225,8 @@
   }
 
   async function claimStation(name, options = {}) {
-    if (!presenceChannel || !presenceReady || !STATIONS.includes(name) || stationChangeInProgress) return false;
+    const stations = allowedStations();
+    if (!presenceChannel || !presenceReady || !stations.includes(name) || stationChangeInProgress) return false;
 
     if (occupiedByOther(name)) {
       if (!options.silent) openStationModal(`${name} è già utilizzata da un altro operatore.`);
@@ -205,6 +243,7 @@
         station_name: name,
         instance_id: instanceId,
         user_id: currentSession.user.id,
+        role: currentProfile?.ruolo || '',
         claimed_at: new Date().toISOString()
       });
 
@@ -227,6 +266,13 @@
   async function validateCurrentStationClaim() {
     if (!currentStation || !presenceChannel || stationChangeInProgress) return;
 
+    if (!allowedStations().includes(currentStation)) {
+      clearCurrentStation();
+      try { await presenceChannel.untrack(); } catch (_) {}
+      await restoreOrSelectStation();
+      return;
+    }
+
     const entries = entriesForStation(currentStation);
     const distinctInstances = [...new Set(entries.map(entry => entry.instance_id).filter(Boolean))].sort();
 
@@ -238,7 +284,7 @@
     const lostStation = currentStation;
     clearCurrentStation();
     try { await presenceChannel.untrack(); } catch (_) {}
-    openStationModal(`${lostStation} è stata occupata contemporaneamente da un'altra postazione. Selezionane una libera.`);
+    openStationModal(`${lostStation} è stata occupata contemporaneamente da un'altra postazione.`);
     renderPresence();
   }
 
@@ -291,14 +337,31 @@
   }
 
   async function restoreOrSelectStation() {
+    const stations = allowedStations();
     const savedStation = sessionStorage.getItem(STATION_STORAGE_KEY);
 
-    if (savedStation && STATIONS.includes(savedStation) && !occupiedByOther(savedStation)) {
+    if (!stations.length) {
+      clearCurrentStation();
+      openStationModal('A questo account non è associata alcuna postazione operativa.');
+      return;
+    }
+
+    if (savedStation && stations.includes(savedStation) && !occupiedByOther(savedStation)) {
       const restored = await claimStation(savedStation, { silent: true });
       if (restored) return;
     }
 
     clearCurrentStation();
+
+    if (stations.length === 1) {
+      if (occupiedByOther(stations[0])) {
+        openStationModal(`${stations[0]} è già utilizzata da un'altra sessione.`);
+        return;
+      }
+      await claimStation(stations[0], { silent: true });
+      return;
+    }
+
     openStationModal();
   }
 
@@ -341,11 +404,23 @@
     currentProfile = await verifyAuthorization(session);
     if (!currentProfile) return;
 
+    window.CAMPO_RESERVED_PROFILE = currentProfile;
+    document.body.dataset.appRole = currentProfile.ruolo || '';
+
     accessRole.textContent = roleLabel(currentProfile.ruolo);
     sessionLabel.textContent = `${currentProfile.nome_visualizzato} · ${session.user.email || 'utente autorizzato'}`;
 
+    const stations = allowedStations();
+    if (stations.length === 1) {
+      stationBadge.disabled = true;
+      stationBadge.title = `Postazione assegnata automaticamente: ${stations[0]}`;
+    } else {
+      stationBadge.disabled = false;
+      stationBadge.title = 'Cambia postazione';
+      stationBadge.addEventListener('click', () => openStationModal());
+    }
+
     logoutButton.addEventListener('click', handleLogout);
-    stationBadge.addEventListener('click', () => openStationModal());
     cancelStationButton.addEventListener('click', closeStationModal);
 
     stationForm.addEventListener('submit', async event => {
