@@ -14,7 +14,7 @@
   let client = null, session = null, currentPersonId = null, realtimeChannel = null, searchTimer = null, reloadTimer = null, toastTimer = null;
   const mealLabels = { colazione: 'Colazione', pranzo: 'Pranzo', cena: 'Cena' };
 
-  function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char])); }
+  function escapeHtml(value) { return String(value ?? '').replace(/[&<>'\"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '\"': '&quot;' }[char])); }
   function todayRome() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
   function formatDateTime(value) { if (!value) return ''; const date = new Date(value); if (Number.isNaN(date.getTime())) return ''; return new Intl.DateTimeFormat('it-IT', { timeZone: 'Europe/Rome', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).format(date); }
   function getStation() { return sessionStorage.getItem(STATION_STORAGE_KEY) || 'Cucina'; }
@@ -143,6 +143,209 @@
     els.date.value = todayRome(); bindEvents();
     const stationReady = await waitForStation(); if (!stationReady) { showToast('Postazione Cucina non disponibile.', 'error'); return; }
     connectRealtime(); await loadDashboard();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+
+(() => {
+  'use strict';
+
+  const config = window.CAMPO_CONFIG && window.CAMPO_CONFIG.supabase;
+  const $ = id => document.getElementById(id);
+  let client = null;
+  let session = null;
+  let loadedPersonId = null;
+  let rowExists = false;
+  let saveTimer = null;
+  let realtimeChannel = null;
+  let localSaveInProgress = false;
+
+  function injectStyles() {
+    if ($('dietaryEditorStyles')) return;
+    const style = document.createElement('style');
+    style.id = 'dietaryEditorStyles';
+    style.textContent = `
+      .dietary-editor{border:1px solid #ead6a7;background:#fffaf0;border-radius:14px;padding:14px;margin-bottom:14px}
+      .dietary-editor .switch-row{margin:0}
+      .dietary-details{display:block;margin-top:12px;font-size:13px;font-weight:800;color:var(--ink)}
+      .dietary-details[hidden]{display:none}
+      .dietary-details textarea{margin-top:7px;min-height:82px;width:100%;resize:vertical}
+      .dietary-save-state{min-height:18px;margin-top:8px;font-size:12px;font-weight:750;color:var(--muted)}
+      .dietary-save-state.saving{color:#8b6100}.dietary-save-state.saved{color:#16794f}.dietary-save-state.error{color:#b00020}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function injectUi() {
+    if ($('personDietaryPresent')) return;
+    const form = $('personForm');
+    if (!form) return;
+    const titles = [...form.querySelectorAll('.form-section-title')];
+    const iceTitle = titles.find(node => node.textContent.trim().toLowerCase() === 'contatto ice');
+    const iceGrid = iceTitle?.nextElementSibling;
+    if (!iceGrid) return;
+
+    const fragment = document.createElement('div');
+    fragment.innerHTML = `
+      <div class="form-section-title" id="personDietaryTitle">Esigenze alimentari</div>
+      <div class="dietary-editor" id="personDietaryEditor">
+        <label class="switch-row">
+          <input id="personDietaryPresent" type="checkbox">
+          <span><b>Allergie / intolleranze alimentari</b><small>Segnalazione operativa condivisa con la Cucina</small></span>
+        </label>
+        <label id="personDietaryDetailsWrap" class="dietary-details" hidden>
+          Dettaglio dell'esigenza
+          <textarea id="personDietaryDescription" class="field-textarea" rows="3" placeholder="Es. celiachia, allergia alla frutta a guscio, intolleranza al lattosio…"></textarea>
+        </label>
+        <div id="personDietarySaveState" class="dietary-save-state" aria-live="polite"></div>
+      </div>`;
+
+    const nodes = [...fragment.childNodes];
+    iceGrid.after(...nodes);
+  }
+
+  function setState(message = '', type = '') {
+    const el = $('personDietarySaveState');
+    if (!el) return;
+    el.textContent = message;
+    el.className = `dietary-save-state${type ? ` ${type}` : ''}`;
+  }
+
+  function refreshDetailsVisibility() {
+    const present = $('personDietaryPresent');
+    const wrap = $('personDietaryDetailsWrap');
+    const description = $('personDietaryDescription');
+    if (!present || !wrap || !description) return;
+    wrap.hidden = !present.checked;
+    description.disabled = !present.checked;
+    if (!present.checked) description.value = '';
+  }
+
+  function currentPersonId() {
+    return String($('personId')?.value || '').trim() || null;
+  }
+
+  async function loadDietaryForCurrentPerson() {
+    const personId = currentPersonId();
+    if (!personId || $('personModal')?.hidden) return;
+    loadedPersonId = personId;
+    rowExists = false;
+    setState('Caricamento…');
+
+    const { data, error } = await client
+      .from('esigenze_alimentari')
+      .select('persona_id,presente,descrizione')
+      .eq('persona_id', personId)
+      .maybeSingle();
+
+    if (loadedPersonId !== personId) return;
+    if (error) {
+      setState(`Impossibile leggere la segnalazione: ${error.message}`, 'error');
+      return;
+    }
+
+    rowExists = !!data;
+    $('personDietaryPresent').checked = !!data?.presente;
+    $('personDietaryDescription').value = data?.descrizione || '';
+    refreshDetailsVisibility();
+    setState(data?.presente ? 'Segnalazione attiva · sincronizzata con Cucina' : 'Nessuna esigenza alimentare segnalata');
+  }
+
+  async function saveDietary() {
+    clearTimeout(saveTimer);
+    const personId = currentPersonId();
+    if (!personId || personId !== loadedPersonId || $('personModal')?.hidden) return;
+
+    const present = !!$('personDietaryPresent')?.checked;
+    const description = present ? (String($('personDietaryDescription')?.value || '').trim() || null) : null;
+
+    if (!rowExists && !present) {
+      setState('Nessuna esigenza alimentare segnalata');
+      return;
+    }
+
+    localSaveInProgress = true;
+    setState('Salvataggio…', 'saving');
+
+    let result;
+    if (rowExists) {
+      result = await client
+        .from('esigenze_alimentari')
+        .update({ presente: present, descrizione: description })
+        .eq('persona_id', personId);
+    } else {
+      result = await client
+        .from('esigenze_alimentari')
+        .insert({ persona_id: personId, presente: present, descrizione: description });
+    }
+
+    localSaveInProgress = false;
+    if (result.error) {
+      setState(`Salvataggio non riuscito: ${result.error.message}`, 'error');
+      return;
+    }
+
+    rowExists = true;
+    setState(present ? 'Salvato · disponibile anche alla Cucina' : 'Salvato · nessuna esigenza alimentare', 'saved');
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDietary, 650);
+  }
+
+  function bindUi() {
+    $('personDietaryPresent')?.addEventListener('change', async () => {
+      refreshDetailsVisibility();
+      await saveDietary();
+    });
+    $('personDietaryDescription')?.addEventListener('input', scheduleSave);
+    $('personDietaryDescription')?.addEventListener('blur', saveDietary);
+    $('personForm')?.addEventListener('submit', () => { if (currentPersonId() === loadedPersonId) void saveDietary(); });
+
+    const modal = $('personModal');
+    if (modal) {
+      const observer = new MutationObserver(() => {
+        if (!modal.hidden) setTimeout(loadDietaryForCurrentPerson, 0);
+        else { clearTimeout(saveTimer); loadedPersonId = null; rowExists = false; }
+      });
+      observer.observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+    }
+  }
+
+  function connectRealtime() {
+    realtimeChannel = client.channel('campo-segreteria-dietary');
+    realtimeChannel
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'esigenze_alimentari' }, payload => {
+        const personId = payload.new?.persona_id || payload.old?.persona_id;
+        if (!localSaveInProgress && personId && personId === loadedPersonId && !$('personModal')?.hidden) {
+          loadDietaryForCurrentPerson();
+        }
+      })
+      .subscribe();
+  }
+
+  async function init() {
+    if (!config || !window.supabase || !$('personForm')) return;
+    client = window.supabase.createClient(config.url, config.publishableKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false } });
+    const { data: { session: currentSession }, error } = await client.auth.getSession();
+    if (error || !currentSession) return;
+    session = currentSession;
+
+    const { data: profile, error: profileError } = await client
+      .from('utenti_segreteria')
+      .select('ruolo,attivo')
+      .eq('user_id', session.user.id)
+      .maybeSingle();
+
+    if (profileError || !profile?.attivo || !['admin', 'segreteria'].includes(profile.ruolo)) return;
+
+    injectStyles();
+    injectUi();
+    bindUi();
+    connectRealtime();
+    if (!$('personModal')?.hidden) await loadDietaryForCurrentPerson();
   }
 
   document.addEventListener('DOMContentLoaded', init);
