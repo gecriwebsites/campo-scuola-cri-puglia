@@ -450,3 +450,12 @@
 
   document.addEventListener('DOMContentLoaded', init);
 })();
+
+(() => {
+  if (document.getElementById('pernottamentiModuleScript')) return;
+  const script = document.createElement('script');
+  script.id = 'pernottamentiModuleScript';
+  script.src = 'assets/js/pernottamenti-segreteria.js?v=3d5b';
+  script.defer = true;
+  document.head.appendChild(script);
+})();
