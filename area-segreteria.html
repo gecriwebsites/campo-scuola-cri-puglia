@@ -15,10 +15,7 @@
     <div class="container reserved-topbar-inner">
       <a class="reserved-brand" href="area-segreteria.html" aria-label="Area Segreteria">
         <img src="assets/img/logo-cri-puglia.png" alt="Croce Rossa Italiana - Comitato Regionale Puglia">
-        <div>
-          <strong>Area Segreteria</strong>
-          <span>Campo Scuola CRI Puglia 2026</span>
-        </div>
+        <div><strong>Area Segreteria</strong><span>Campo Scuola CRI Puglia 2026</span></div>
       </a>
       <div class="reserved-header-actions">
         <a class="reserved-public-link" href="index.html">Portale pubblico</a>
@@ -28,83 +25,196 @@
 
     <div class="reserved-statusbar" aria-label="Stato Area Segreteria">
       <div class="container reserved-statusbar-inner">
-        <button id="stationBadge" class="mini-status mini-status-button" type="button" title="Cambia postazione">
-          <span class="mini-status-label">Postazione</span>
-          <strong id="stationName">Da selezionare</strong>
-        </button>
-        <div class="mini-status" id="onlineBadge" title="Postazioni operative connesse">
-          <span class="mini-status-label">Postazioni online</span>
-          <strong id="onlineStations">0/5</strong>
-        </div>
-        <div class="mini-status" title="Livello di accesso dell'account">
-          <span class="mini-status-label">Accesso</span>
-          <strong id="accessRole">—</strong>
-        </div>
-        <div class="mini-status system-status" id="systemBadge" title="Stato della connessione realtime">
-          <span id="systemDot" class="system-dot waiting" aria-hidden="true"></span>
-          <span class="mini-status-label">Sistema</span>
-          <strong id="connectionState">Connessione…</strong>
-        </div>
+        <button id="stationBadge" class="mini-status mini-status-button" type="button" title="Cambia postazione"><span class="mini-status-label">Postazione</span><strong id="stationName">Da selezionare</strong></button>
+        <div class="mini-status" id="onlineBadge" title="Postazioni operative connesse"><span class="mini-status-label">Postazioni online</span><strong id="onlineStations">0/5</strong></div>
+        <div class="mini-status" title="Livello di accesso dell'account"><span class="mini-status-label">Accesso</span><strong id="accessRole">—</strong></div>
+        <div class="mini-status system-status" id="systemBadge" title="Stato della connessione realtime"><span id="systemDot" class="system-dot waiting" aria-hidden="true"></span><span class="mini-status-label">Sistema</span><strong id="connectionState">Connessione…</strong></div>
       </div>
     </div>
   </header>
 
   <main class="reserved-main app-main">
     <section class="container reserved-app">
-      <div class="app-heading compact-heading">
+      <div class="app-shell-head">
         <div>
           <div class="kicker">Area operativa</div>
           <h1>Segreteria Campo</h1>
           <p id="sessionLabel">Accesso autenticato</p>
         </div>
+        <nav class="app-nav" aria-label="Moduli Area Segreteria">
+          <button class="app-nav-btn active" type="button" data-view="dashboard">Dashboard</button>
+          <button class="app-nav-btn" type="button" data-view="persone">Persone</button>
+          <button class="app-nav-btn" type="button" data-view="accreditamento">Accreditamento</button>
+        </nav>
       </div>
 
-      <div class="modules-head modules-head-first">
-        <div>
-          <div class="kicker">Gestione Campo</div>
-          <h2>Moduli operativi</h2>
+      <div id="operationNotice" class="operation-notice" hidden></div>
+
+      <section class="app-view active" data-view-panel="dashboard">
+        <div class="metric-grid" aria-label="Indicatori principali">
+          <article class="metric-card"><span class="metric-icon">👥</span><div><small>Persone registrate</small><strong id="metricPeople">—</strong></div></article>
+          <article class="metric-card live"><span class="metric-icon">●</span><div><small>Presenti al Campo</small><strong id="metricPresent">—</strong></div></article>
+          <article class="metric-card"><span class="metric-icon">🎫</span><div><small>Badge consegnati</small><strong id="metricBadges">—</strong></div></article>
+          <article class="metric-card"><span class="metric-icon">🎁</span><div><small>Gadget consegnati</small><strong id="metricGadgets">—</strong></div></article>
         </div>
-        <p>Un'unica area di lavoro condivisa tra le cinque postazioni della Segreteria, aggiornata in tempo reale.</p>
-      </div>
 
-      <div class="module-grid">
-        <article class="module-card"><span>👥</span><div><strong>Persone</strong><small>Anagrafica, ricerca e schede individuali</small></div></article>
-        <article class="module-card"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge e gadget</small></div></article>
-        <article class="module-card"><span>🗓️</span><div><strong>Turni</strong><small>Disponibilità e assegnazioni</small></div></article>
-        <article class="module-card"><span>⛺</span><div><strong>Pernottamenti</strong><small>Tende e posti letto</small></div></article>
-        <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Previsioni e supporto cucina</small></div></article>
-        <article class="module-card"><span>🚑</span><div><strong>Mezzi</strong><small>Attivazioni, autisti e movimenti</small></div></article>
-        <article class="module-card"><span>📥</span><div><strong>Importa Excel</strong><small>Anteprima, verifica e importazione</small></div></article>
-        <article class="module-card"><span>📊</span><div><strong>Situazione Campo</strong><small>Presenze e indicatori operativi</small></div></article>
-      </div>
+        <div class="dashboard-action-grid">
+          <article class="dashboard-panel fast-panel">
+            <div class="panel-kicker">Operatività rapida</div>
+            <h2>Accredita una persona</h2>
+            <p>Cerca per nome, cognome, codice fiscale, telefono o numero badge.</p>
+            <div class="quick-search-wrap"><span>⌕</span><input id="dashboardQuickSearch" type="search" placeholder="Cerca persona…" autocomplete="off"></div>
+            <div id="dashboardQuickResults" class="quick-results"></div>
+            <button class="btn primary" type="button" data-open-view="accreditamento">Apri Accreditamento</button>
+          </article>
+          <article class="dashboard-panel">
+            <div class="panel-kicker">Situazione attuale</div>
+            <h2>Presenze in tempo reale</h2>
+            <div class="presence-summary"><strong id="dashboardPresentLarge">—</strong><span>persone attualmente presenti</span></div>
+            <div class="summary-row"><span>Fuori dal Campo</span><strong id="dashboardOutside">—</strong></div>
+            <div class="summary-row"><span>Con pernottamento</span><strong id="dashboardOvernight">—</strong></div>
+            <button class="btn secondary" type="button" data-filter-present="true">Visualizza i presenti</button>
+          </article>
+        </div>
+
+        <div class="modules-head modules-head-first">
+          <div><div class="kicker">Gestione Campo</div><h2>Moduli operativi</h2></div>
+          <p>I primi moduli sono già operativi. Gli altri verranno collegati progressivamente alla stessa base dati.</p>
+        </div>
+        <div class="module-grid">
+          <button class="module-card module-button active-module" type="button" data-open-view="persone"><span>👥</span><div><strong>Persone</strong><small>Anagrafica, ricerca e schede individuali</small><em>Operativo</em></div></button>
+          <button class="module-card module-button active-module" type="button" data-open-view="accreditamento"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge e gadget</small><em>Operativo</em></div></button>
+          <article class="module-card"><span>🗓️</span><div><strong>Turni</strong><small>Disponibilità e assegnazioni</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>⛺</span><div><strong>Pernottamenti</strong><small>Tende e posti letto</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Previsioni e supporto cucina</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>🚑</span><div><strong>Mezzi</strong><small>Attivazioni, autisti e movimenti</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>📥</span><div><strong>Importa Excel</strong><small>Anteprima, verifica e importazione</small><em>Da attivare</em></div></article>
+          <article class="module-card"><span>📊</span><div><strong>Situazione Campo</strong><small>Presenze e indicatori operativi</small><em>In sviluppo</em></div></article>
+        </div>
+      </section>
+
+      <section class="app-view" data-view-panel="persone" hidden>
+        <div class="view-heading">
+          <div><div class="kicker">Anagrafica</div><h2>Persone</h2><p>Archivio unico di discenti, docenti, staff e ospiti.</p></div>
+          <button id="addPersonButton" class="btn primary" type="button">＋ Nuova persona</button>
+        </div>
+        <div class="data-toolbar">
+          <div class="data-search"><span>⌕</span><input id="peopleSearch" type="search" placeholder="Nome, cognome, CF, telefono, badge…" autocomplete="off"></div>
+          <select id="peopleTypeFilter" class="compact-select"><option value="">Tutte le tipologie</option><option value="discente">Discente</option><option value="docente">Docente</option><option value="staff">Staff</option><option value="ospite">Ospite</option><option value="altro">Altro</option></select>
+          <select id="peoplePresenceFilter" class="compact-select"><option value="">Tutte le presenze</option><option value="present">Presenti</option><option value="outside">Fuori dal Campo</option></select>
+          <button id="refreshPeopleButton" class="icon-btn" type="button" title="Aggiorna dati">↻</button>
+        </div>
+        <div class="data-meta"><span id="peopleCount">0 persone</span><span id="peopleRealtimeState">Realtime in attivazione…</span></div>
+        <div class="table-card">
+          <div class="people-table-wrap">
+            <table class="people-table">
+              <thead><tr><th>Persona</th><th>Tipologia</th><th>Comitato</th><th>Badge</th><th>Presenza</th><th>Stato lavoro</th><th></th></tr></thead>
+              <tbody id="peopleTableBody"></tbody>
+            </table>
+          </div>
+          <div id="peopleEmpty" class="empty-state" hidden>Nessuna persona trovata.</div>
+        </div>
+      </section>
+
+      <section class="app-view" data-view-panel="accreditamento" hidden>
+        <div class="view-heading accreditation-heading">
+          <div><div class="kicker">Ingresso Campo</div><h2>Accreditamento</h2><p>Ricerca rapida e registrazione di entrata, badge e gadget.</p></div>
+          <div class="accreditation-live"><span class="live-dot"></span><strong id="accreditationPresentCount">— presenti</strong></div>
+        </div>
+        <div class="accredit-search-panel">
+          <div class="accredit-search"><span>⌕</span><input id="accreditSearch" type="search" placeholder="Inizia a digitare nome, cognome, CF, telefono o badge…" autocomplete="off"></div>
+          <div class="accredit-filters">
+            <button class="filter-pill active" type="button" data-accredit-filter="all">Tutti</button>
+            <button class="filter-pill" type="button" data-accredit-filter="outside">Da accreditare</button>
+            <button class="filter-pill" type="button" data-accredit-filter="present">Già presenti</button>
+          </div>
+        </div>
+        <div id="accreditList" class="accredit-list"></div>
+        <div id="accreditEmpty" class="empty-state" hidden>Nessun risultato.</div>
+      </section>
     </section>
   </main>
 
   <div id="stationModal" class="station-modal" hidden>
     <div class="station-modal-backdrop" aria-hidden="true"></div>
     <section class="station-modal-card" role="dialog" aria-modal="true" aria-labelledby="stationModalTitle">
-      <div class="station-modal-icon" aria-hidden="true">🖥️</div>
-      <div class="kicker">Postazione operativa</div>
-      <h2 id="stationModalTitle">Seleziona la postazione</h2>
+      <div class="station-modal-icon" aria-hidden="true">🖥️</div><div class="kicker">Postazione operativa</div><h2 id="stationModalTitle">Seleziona la postazione</h2>
       <p>Sono disponibili cinque postazioni. Quelle già utilizzate da un altro operatore non possono essere selezionate.</p>
-
       <form id="stationForm">
         <label class="field-label" for="stationSelect">Postazione</label>
-        <select id="stationSelect" class="field-input station-select" required>
-          <option value="">Seleziona…</option>
-        </select>
+        <select id="stationSelect" class="field-input station-select" required><option value="">Seleziona…</option></select>
         <div id="stationAvailability" class="station-availability">Verifica disponibilità in corso…</div>
         <div id="stationMessage" class="form-message" role="status" aria-live="polite"></div>
-        <div class="station-modal-actions">
-          <button id="cancelStationButton" class="btn secondary" type="button" hidden>Annulla</button>
-          <button id="activateStationButton" class="btn primary" type="submit">Entra nella postazione</button>
-        </div>
+        <div class="station-modal-actions"><button id="cancelStationButton" class="btn secondary" type="button" hidden>Annulla</button><button id="activateStationButton" class="btn primary" type="submit">Entra nella postazione</button></div>
       </form>
     </section>
   </div>
 
+  <div id="personModal" class="person-modal" hidden>
+    <div class="person-modal-backdrop" data-close-person aria-hidden="true"></div>
+    <section class="person-panel" role="dialog" aria-modal="true" aria-labelledby="personModalTitle">
+      <header class="person-panel-head">
+        <div><div id="personPresencePill" class="presence-pill">—</div><h2 id="personModalTitle">Scheda persona</h2><p id="personModalSubtitle"></p></div>
+        <button class="panel-close" type="button" data-close-person aria-label="Chiudi">×</button>
+      </header>
+      <div id="personWorkNotice" class="work-notice" hidden></div>
+      <div class="person-panel-body">
+        <form id="personForm" class="person-form">
+          <input id="personId" type="hidden"><input id="personUpdatedAt" type="hidden">
+          <div class="form-section-title">Anagrafica</div>
+          <div class="form-grid two"><label>Nome<input id="personNome" class="field-input" required></label><label>Cognome<input id="personCognome" class="field-input" required></label></div>
+          <div class="form-grid two"><label>Codice fiscale<input id="personCf" class="field-input" autocomplete="off"></label><label>Tipologia<select id="personTipologia" class="field-input"><option value="discente">Discente</option><option value="docente">Docente</option><option value="staff">Staff</option><option value="ospite">Ospite</option><option value="altro">Altro</option></select></label></div>
+          <div class="form-grid two"><label>Telefono<input id="personTelefono" class="field-input" inputmode="tel"></label><label>Email<input id="personEmail" class="field-input" type="email"></label></div>
+          <div class="form-grid two"><label>Comitato<input id="personComitato" class="field-input"></label><label>Regione<input id="personRegione" class="field-input"></label></div>
+          <div class="form-grid two"><label>Componente CRI<input id="personComponente" class="field-input"></label><label>Numero badge<input id="personBadgeNumber" class="field-input" autocomplete="off"></label></div>
+
+          <div class="form-section-title">Contatto ICE</div>
+          <div class="form-grid two"><label>Nome contatto<input id="personIceName" class="field-input"></label><label>Telefono ICE<input id="personIcePhone" class="field-input" inputmode="tel"></label></div>
+
+          <div class="form-section-title">Campo</div>
+          <div class="switch-grid">
+            <label class="switch-row"><input id="personBadgeDelivered" type="checkbox"><span><b>Badge consegnato</b><small>Materiale di accredito consegnato</small></span></label>
+            <label class="switch-row"><input id="personGadgetDelivered" type="checkbox"><span><b>Gadget consegnato</b><small>Gadget del Campo consegnato</small></span></label>
+            <label class="switch-row"><input id="personPernotto" type="checkbox"><span><b>Pernottamento</b><small>Persona prevista in alloggio</small></span></label>
+          </div>
+          <div class="form-grid two"><label>Arrivo previsto<input id="personArrival" class="field-input" type="date"></label><label>Partenza prevista<input id="personDeparture" class="field-input" type="date"></label></div>
+          <label>Note<textarea id="personNotes" class="field-textarea" rows="3"></textarea></label>
+          <div id="personCourses" class="course-chips" hidden></div>
+          <div id="personFormMessage" class="form-message" role="status" aria-live="polite"></div>
+          <div class="person-save-row"><button id="savePersonButton" class="btn primary" type="submit">Salva modifiche</button></div>
+        </form>
+
+        <aside class="accredit-side">
+          <div class="accredit-side-head"><div class="panel-kicker">Accreditamento</div><h3>Stato operativo</h3></div>
+          <div class="current-state"><span>Presenza</span><strong id="personPresenceState">—</strong><small id="personLastMovement">Nessun movimento registrato</small></div>
+          <button id="checkinButton" class="big-action success-action" type="button">✓ Registra ENTRATA</button>
+          <button id="checkoutButton" class="big-action danger-action" type="button">↗ Registra USCITA</button>
+          <div class="accredit-help">L'operazione viene salvata nello storico e aggiornata in tempo reale sulle altre postazioni.</div>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+  <div id="newPersonModal" class="person-modal" hidden>
+    <div class="person-modal-backdrop" data-close-new-person aria-hidden="true"></div>
+    <section class="new-person-card" role="dialog" aria-modal="true" aria-labelledby="newPersonTitle">
+      <header class="person-panel-head"><div><div class="kicker">Nuova anagrafica</div><h2 id="newPersonTitle">Aggiungi persona</h2><p>Inserisci almeno nome e cognome.</p></div><button class="panel-close" type="button" data-close-new-person aria-label="Chiudi">×</button></header>
+      <form id="newPersonForm" class="new-person-form">
+        <div class="form-grid two"><label>Nome<input id="newNome" class="field-input" required></label><label>Cognome<input id="newCognome" class="field-input" required></label></div>
+        <div class="form-grid two"><label>Codice fiscale<input id="newCf" class="field-input"></label><label>Tipologia<select id="newTipologia" class="field-input"><option value="discente">Discente</option><option value="docente">Docente</option><option value="staff">Staff</option><option value="ospite">Ospite</option><option value="altro">Altro</option></select></label></div>
+        <div class="form-grid two"><label>Telefono<input id="newTelefono" class="field-input"></label><label>Email<input id="newEmail" class="field-input" type="email"></label></div>
+        <div class="form-grid two"><label>Comitato<input id="newComitato" class="field-input"></label><label>Regione<input id="newRegione" class="field-input"></label></div>
+        <div id="newPersonMessage" class="form-message"></div>
+        <div class="station-modal-actions"><button class="btn secondary" type="button" data-close-new-person>Annulla</button><button id="createPersonButton" class="btn primary" type="submit">Crea persona</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/area-segreteria.js"></script>
+  <script src="assets/js/gestione-segreteria.js"></script>
 </body>
 </html>
