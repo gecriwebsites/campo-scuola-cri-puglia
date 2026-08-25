@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#d40000">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Area Segreteria | Campo Scuola CRI Puglia</title>
+  <meta name="description" content="Area riservata della Segreteria del Campo Scuola CRI Puglia 2026">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/area-segreteria.css">
+</head>
+<body class="reserved-body">
+  <header class="reserved-topbar">
+    <div class="container reserved-topbar-inner">
+      <a class="reserved-brand" href="index.html" aria-label="Torna al portale pubblico">
+        <img src="assets/img/logo-cri-puglia.png" alt="Croce Rossa Italiana - Comitato Regionale Puglia">
+        <div>
+          <strong>Area Segreteria</strong>
+          <span>Campo Scuola CRI Puglia 2026</span>
+        </div>
+      </a>
+      <a class="reserved-public-link" href="index.html">← Portale pubblico</a>
+    </div>
+  </header>
+
+  <main class="reserved-main">
+    <section id="authView" class="container auth-layout" aria-labelledby="loginTitle">
+      <div class="auth-intro">
+        <div class="kicker">Area riservata</div>
+        <h1 id="loginTitle">Segreteria del Campo</h1>
+        <p>Accedi con le credenziali autorizzate per utilizzare gli strumenti operativi della Segreteria.</p>
+        <div class="auth-feature-list" aria-label="Funzioni dell'area riservata">
+          <span>● Accredito e presenze</span>
+          <span>● Gestione persone e turni</span>
+          <span>● Pernottamenti e pasti</span>
+          <span>● Mezzi e movimentazioni</span>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-head">
+          <span class="auth-lock" aria-hidden="true">🔐</span>
+          <div>
+            <h2>Accesso</h2>
+            <p>La sessione può restare attiva su questa postazione fino al logout.</p>
+          </div>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <label class="field-label" for="loginEmail">Email</label>
+          <input class="field-input" id="loginEmail" name="email" type="email" autocomplete="username" required>
+
+          <label class="field-label" for="loginPassword">Password</label>
+          <div class="password-wrap">
+            <input class="field-input" id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+            <button id="togglePassword" class="password-toggle" type="button" aria-label="Mostra password">Mostra</button>
+          </div>
+
+          <button id="loginButton" class="btn primary auth-submit" type="submit">Accedi all'Area Segreteria</button>
+          <div id="loginMessage" class="form-message" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="appView" class="container reserved-app" hidden>
+      <div class="app-heading">
+        <div>
+          <div class="kicker">Area operativa</div>
+          <h1>Segreteria Campo</h1>
+          <p id="sessionLabel">Accesso autenticato</p>
+        </div>
+        <button id="logoutButton" class="btn secondary" type="button">Esci</button>
+      </div>
+
+      <div id="stationSetup" class="station-setup" hidden>
+        <div>
+          <strong>Identifica questa postazione</strong>
+          <p>Usa un nome semplice e riconoscibile, ad esempio “Accredito 1”, “Accredito 2” o “Segreteria”.</p>
+        </div>
+        <form id="stationForm" class="station-form">
+          <input class="field-input" id="stationNameInput" maxlength="40" placeholder="Es. Accredito 1" autocomplete="off" required>
+          <button class="btn primary" type="submit">Attiva postazione</button>
+        </form>
+      </div>
+
+      <div id="dashboardContent" hidden>
+        <div class="status-grid">
+          <article class="status-card">
+            <span class="status-label">Postazione</span>
+            <strong id="stationName">—</strong>
+            <button id="changeStationButton" class="text-button" type="button">Rinomina</button>
+          </article>
+          <article class="status-card">
+            <span class="status-label">Postazioni online</span>
+            <strong id="onlineStations">1</strong>
+            <span id="onlineStationsDetail" class="status-detail">Connessione realtime attiva</span>
+          </article>
+          <article class="status-card">
+            <span class="status-label">Accesso</span>
+            <strong id="accessRole">Segreteria</strong>
+            <span class="status-detail">Sessione autorizzata</span>
+          </article>
+          <article class="status-card">
+            <span class="status-label">Sistema</span>
+            <strong id="connectionState" class="connection-ok">Online</strong>
+            <span class="status-detail">Dati centralizzati</span>
+          </article>
+        </div>
+
+        <div class="modules-head">
+          <div>
+            <div class="kicker">Gestione Campo</div>
+            <h2>Moduli operativi</h2>
+          </div>
+          <p>Le funzioni verranno attivate progressivamente mantenendo un'unica area di lavoro condivisa tra tutte le postazioni.</p>
+        </div>
+
+        <div class="module-grid">
+          <article class="module-card"><span>👥</span><div><strong>Persone</strong><small>Anagrafica, ricerca e schede individuali</small></div></article>
+          <article class="module-card"><span>✅</span><div><strong>Accreditamento</strong><small>Check-in, badge e gadget</small></div></article>
+          <article class="module-card"><span>🗓️</span><div><strong>Turni</strong><small>Disponibilità e assegnazioni</small></div></article>
+          <article class="module-card"><span>⛺</span><div><strong>Pernottamenti</strong><small>Tende e posti letto</small></div></article>
+          <article class="module-card"><span>🍽️</span><div><strong>Pasti</strong><small>Previsioni e supporto cucina</small></div></article>
+          <article class="module-card"><span>🚑</span><div><strong>Mezzi</strong><small>Attivazioni, autisti e movimenti</small></div></article>
+          <article class="module-card"><span>📥</span><div><strong>Importa Excel</strong><small>Anteprima, verifica e importazione</small></div></article>
+          <article class="module-card"><span>📊</span><div><strong>Situazione Campo</strong><small>Presenze e indicatori operativi</small></div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/area-segreteria.js"></script>
+</body>
+</html>
