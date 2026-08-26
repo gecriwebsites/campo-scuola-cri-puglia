@@ -67,6 +67,7 @@ window.CAMPO_CONFIG = {
     'assets/js/pernottamenti-segreteria.js',
     'assets/js/turni-segreteria.js',
     'assets/js/turni-ux-v1.js',
+    'assets/js/turni-stati-rapidi.js',
     'assets/js/mezzi-segreteria.js',
     'assets/js/situazione-campo.js',
     'assets/js/import-excel-segreteria.js',
