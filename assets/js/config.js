@@ -76,6 +76,7 @@ window.CAMPO_CONFIG = {
     'assets/js/persone-ux-v1.js',
     'assets/js/persone-table-responsive-fix.js',
     'assets/js/accreditamento-ux-v1.js',
+    'assets/js/accreditamento-persona-ux-v2.js',
     'assets/js/admin-tools.js'
   ];
 
