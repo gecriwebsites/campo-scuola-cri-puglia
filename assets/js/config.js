@@ -65,6 +65,7 @@ window.CAMPO_CONFIG = {
 
   const sources = [
     'assets/js/pernottamenti-segreteria.js',
+    'assets/js/pernottamenti-ux-v1.js',
     'assets/js/turni-segreteria.js',
     'assets/js/turni-ux-v1.js',
     'assets/js/turni-stati-rapidi.js',
