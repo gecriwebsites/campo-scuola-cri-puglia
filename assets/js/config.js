@@ -59,6 +59,10 @@ window.CAMPO_CONFIG = {
   const workspace = document.getElementById('standardWorkspace');
   if (!workspace) return;
 
+  const style = document.createElement('style');
+  style.textContent = '.app-nav{max-width:100%;overflow-x:auto;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav-btn{flex:0 0 auto}';
+  document.head.appendChild(style);
+
   const sources = [
     'assets/js/pernottamenti-segreteria.js',
     'assets/js/turni-segreteria.js',
@@ -72,11 +76,7 @@ window.CAMPO_CONFIG = {
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
     'assets/js/accreditamento-verifica-excel.js',
-    'assets/js/accreditamento-verifica-editor.js',
-    'assets/js/accreditamento-wizard-v4.js',
-    'assets/js/accreditamento-semplice-v5.js',
-    'assets/js/admin-tools.js',
-    'assets/js/gestionale-modern-ui.js'
+    'assets/js/admin-tools.js'
   ];
 
   if (document.readyState === 'loading') {
