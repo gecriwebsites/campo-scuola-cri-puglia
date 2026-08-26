@@ -73,6 +73,7 @@ window.CAMPO_CONFIG = {
     'assets/js/import-excel-timeout-fix.js',
     'assets/js/import-excel-management.js',
     'assets/js/import-excel-finalize.js',
+    'assets/js/accreditamento-verifica-excel.js',
     'assets/js/admin-tools.js'
   ];
 
