@@ -59,6 +59,10 @@ window.CAMPO_CONFIG = {
   const workspace = document.getElementById('standardWorkspace');
   if (!workspace) return;
 
+  const style = document.createElement('style');
+  style.textContent = '.app-nav{max-width:100%;overflow-x:auto;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav-btn{flex:0 0 auto}';
+  document.head.appendChild(style);
+
   const sources = [
     'assets/js/pernottamenti-segreteria.js',
     'assets/js/turni-segreteria.js'
