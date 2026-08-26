@@ -65,7 +65,8 @@ window.CAMPO_CONFIG = {
 
   const sources = [
     'assets/js/pernottamenti-segreteria.js',
-    'assets/js/turni-segreteria.js'
+    'assets/js/turni-segreteria.js',
+    'assets/js/mezzi-segreteria.js'
   ];
 
   if (document.readyState === 'loading') {
