@@ -54,3 +54,26 @@ window.CAMPO_CONFIG = {
     email: "simone.diaco@puglia.cri.it"
   }
 };
+
+(() => {
+  const workspace = document.getElementById('standardWorkspace');
+  if (!workspace) return;
+
+  const sources = [
+    'assets/js/pernottamenti-segreteria.js',
+    'assets/js/turni-segreteria.js'
+  ];
+
+  if (document.readyState === 'loading') {
+    document.write(sources.map(src => `<script src="${src}"><\/script>`).join(''));
+    return;
+  }
+
+  sources.forEach(src => {
+    if ([...document.scripts].some(script => script.getAttribute('src') === src)) return;
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    document.body.appendChild(script);
+  });
+})();
