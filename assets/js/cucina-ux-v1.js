@@ -8,62 +8,108 @@
     const style = document.createElement('style');
     style.id = 'cucinaUxV1Styles';
     style.textContent = `
-      /* =====================================================
-         CUCINA UX V1 — POSTAZIONE DI SERVIZIO RAPIDA
-         ===================================================== */
-      #kitchenWorkspace.kitchen-ux{max-width:1280px!important;padding-top:10px!important;padding-bottom:34px!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-head{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:16px!important;margin:6px 0 12px!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-head h1{margin:3px 0 4px!important;font-size:30px!important;letter-spacing:-.025em!important;color:#182834!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-head p{margin:0!important;font-size:11px!important;color:#687985!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-head-controls{display:flex!important;gap:6px!important;align-items:center!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-date{height:40px!important;border:1px solid #c9d2d9!important;border-radius:5px!important;padding:0 9px!important;font:inherit!important;font-size:11px!important;background:#fff!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-refresh{width:40px!important;height:40px!important;border:1px solid #c9d2d9!important;border-radius:5px!important;background:#fff!important;font-size:18px!important;box-shadow:none!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-realtime{display:inline-flex!important;width:auto!important;margin:0 0 10px!important;padding:5px 7px!important;border:1px solid #d6e5dc!important;border-radius:4px!important;background:#f2f9f5!important;font-size:9px!important;font-weight:800!important;color:#18714d!important}
+      body[data-app-role="cucina"]{background:#f3f5f6!important}
+      body[data-app-role="cucina"] .reserved-topbar{position:sticky;top:0;z-index:100;background:#fff!important;border-bottom:1px solid #d9e0e5!important;box-shadow:none!important}
+      body[data-app-role="cucina"] .reserved-topbar-inner{min-height:48px!important;padding-top:5px!important;padding-bottom:5px!important}
+      body[data-app-role="cucina"] .reserved-brand img{width:34px!important;height:auto!important}
+      body[data-app-role="cucina"] .reserved-brand div span{display:none!important}
+      body[data-app-role="cucina"] #reservedAreaTitle{font-size:13px!important}
+      body[data-app-role="cucina"] .reserved-public-link{display:none!important}
+      body[data-app-role="cucina"] #logoutButton{min-height:32px!important;padding:5px 9px!important;font-size:10px!important;border-radius:4px!important}
+      body[data-app-role="cucina"] .reserved-statusbar{background:#fff!important;border-top:1px solid #edf0f2!important}
+      body[data-app-role="cucina"] .reserved-statusbar-inner{padding-top:4px!important;padding-bottom:4px!important;min-height:34px!important}
+      body[data-app-role="cucina"] #onlineBadge,body[data-app-role="cucina"] #systemBadge,body[data-app-role="cucina"] #accessRole{display:none!important}
+      body[data-app-role="cucina"] #stationBadge{width:100%!important;justify-content:center!important;min-height:28px!important;border:0!important;background:#f2f6f8!important;border-radius:4px!important;font-size:10px!important}
+      body[data-app-role="cucina"] #stationBadge .mini-status-label{display:none!important}
+      body[data-app-role="cucina"] .reserved-main{padding-top:0!important}
 
-      #kitchenWorkspace.kitchen-ux .meal-dashboard{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;margin:0 0 10px!important;border:1px solid #d5dde3!important;border-radius:7px!important;background:#fff!important;overflow:hidden!important}
-      #kitchenWorkspace.kitchen-ux .meal-summary-card{margin:0!important;padding:11px 13px!important;border:0!important;border-right:1px solid #e3e8ec!important;border-radius:0!important;background:#fff!important;box-shadow:none!important}
-      #kitchenWorkspace.kitchen-ux .meal-summary-card:last-child{border-right:0!important}
-      #kitchenWorkspace.kitchen-ux .meal-summary-card h2{margin:2px 0 8px!important;font-size:15px!important;color:#203440!important}
-      #kitchenWorkspace.kitchen-ux .meal-label{font-size:8px!important;font-weight:850!important;letter-spacing:.07em!important;text-transform:uppercase!important;color:#788791!important}
-      #kitchenWorkspace.kitchen-ux .meal-stat-row{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:4px!important}
-      #kitchenWorkspace.kitchen-ux .meal-stat{padding:6px!important;border:1px solid #e4e9ed!important;border-radius:4px!important;background:#fafbfc!important;text-align:center!important}
-      #kitchenWorkspace.kitchen-ux .meal-stat small{font-size:7px!important;color:#788791!important}.meal-stat strong{font-size:16px!important;margin-top:1px!important;color:#1f3441!important}
+      #kitchenWorkspace.kitchen-ux{width:100%!important;max-width:580px!important;margin:0 auto!important;padding:8px 10px 92px!important;box-sizing:border-box!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-head{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;margin:0 0 7px!important;padding:0!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-head .kicker,#kitchenWorkspace.kitchen-ux .kitchen-head p{display:none!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-head h1{margin:0!important;font-size:20px!important;line-height:1.1!important;color:#182d3a!important;letter-spacing:-.02em!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-head-controls{display:flex!important;gap:4px!important;align-items:center!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-date{width:132px!important;height:34px!important;border:1px solid #cbd4da!important;border-radius:4px!important;padding:0 6px!important;font-size:10px!important;background:#fff!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-refresh{width:34px!important;height:34px!important;border:1px solid #cbd4da!important;border-radius:4px!important;background:#fff!important;font-size:16px!important;box-shadow:none!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-realtime{display:none!important}
+      .kitchen-mobile-station{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 7px;padding:7px 9px;border:1px solid #d5dde3;border-radius:5px;background:#fff}
+      .kitchen-mobile-station span{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:#788791;font-weight:850}
+      .kitchen-mobile-station strong{font-size:11px;color:#173b52}
+      .kitchen-mobile-station button{border:0;background:#eef3f6;border-radius:3px;padding:5px 7px;font:inherit;font-size:8px;font-weight:850;color:#465c69}
 
-      .kitchen-ux-scan-zone{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:9px;margin:0 0 10px}
-      .kitchen-ux-scan-primary{display:flex;align-items:center;gap:16px;min-height:104px;padding:16px 18px;border:1px solid #b9d0dd;border-left:5px solid #173b52;border-radius:7px;background:#eef6fa;cursor:pointer;text-align:left}
-      .kitchen-ux-scan-primary:hover{background:#e6f1f7}.kitchen-ux-scan-primary .icon{width:58px;height:58px;border-radius:6px;background:#173b52;color:#fff;display:grid;place-items:center;font-size:28px;flex:0 0 auto}
-      .kitchen-ux-scan-primary strong{display:block;font-size:18px;color:#173b52}.kitchen-ux-scan-primary span{display:block;margin-top:3px;font-size:11px;line-height:1.4;color:#617887}
-      .kitchen-ux-help{display:flex;flex-direction:column;justify-content:center;padding:13px 15px;border:1px solid #d5dde3;border-radius:7px;background:#fff}
-      .kitchen-ux-help strong{font-size:11px;color:#2b414e}.kitchen-ux-help span{margin-top:4px;font-size:9px;line-height:1.45;color:#73838e}
+      #kitchenWorkspace.kitchen-ux .meal-dashboard{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;margin:0 0 7px!important;border:0!important;background:transparent!important;overflow:visible!important}
+      #kitchenWorkspace.kitchen-ux .meal-summary-card{position:relative!important;margin:0!important;padding:8px 6px!important;border:1px solid #d8e0e5!important;border-radius:5px!important;background:#fff!important;box-shadow:none!important;text-align:center!important;min-width:0!important}
+      #kitchenWorkspace.kitchen-ux .meal-summary-card .meal-label{display:none!important}
+      #kitchenWorkspace.kitchen-ux .meal-summary-card h2{margin:0 0 5px!important;font-size:10px!important;color:#314854!important;white-space:nowrap!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat-row{display:grid!important;grid-template-columns:1fr 1fr!important;gap:2px!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat{padding:0!important;border:0!important;background:transparent!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat:nth-child(1){display:none!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat small{display:block!important;font-size:6px!important;text-transform:uppercase!important;letter-spacing:.04em!important;color:#8a969e!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat strong{display:block!important;margin-top:1px!important;font-size:17px!important;line-height:1!important;color:#203744!important}
+      #kitchenWorkspace.kitchen-ux .meal-stat:nth-child(3) strong{color:#16714c!important}
 
-      #kitchenWorkspace.kitchen-ux .kitchen-tools{display:block!important;margin:0 0 10px!important;padding:10px!important;border:1px solid #d5dde3!important;border-radius:7px!important;background:#fff!important;box-shadow:none!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-box{width:100%!important;margin:0!important}.kitchen-search-box>label{display:block!important;margin-bottom:5px!important;font-size:9px!important;font-weight:850!important;text-transform:uppercase!important;letter-spacing:.06em!important;color:#71808b!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-input{height:42px!important;border:1px solid #c9d2d9!important;border-radius:5px!important;background:#fff!important;padding:0 10px!important;box-shadow:none!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-input input{height:40px!important;font-size:12px!important}
+      .kitchen-ux-scan-zone{margin:0 0 7px!important}
+      .kitchen-ux-scan-primary{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:100%!important;min-height:68px!important;margin:0!important;padding:10px 12px!important;border:0!important;border-radius:6px!important;background:#173b52!important;color:#fff!important;box-shadow:none!important;cursor:pointer!important}
+      .kitchen-ux-scan-primary .icon{font-size:25px!important;line-height:1!important}
+      .kitchen-ux-scan-primary strong{display:block!important;font-size:16px!important;color:#fff!important;line-height:1.1!important}
+      .kitchen-ux-scan-primary .scan-sub{display:block!important;margin-top:2px!important;font-size:8px!important;color:#d8e5ec!important;font-weight:600!important}
+
+      #kitchenWorkspace.kitchen-ux .kitchen-tools{display:block!important;margin:0 0 7px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
       #kitchenWorkspace.kitchen-ux #kitchenScanButton{display:none!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-results{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px!important;margin-top:6px!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-result{min-width:0!important;padding:8px 9px!important;border:1px solid #e0e6ea!important;border-radius:5px!important;background:#fafbfc!important;box-shadow:none!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-search-result strong{font-size:10px!important}.kitchen-search-result small{font-size:8px!important}.dietary-mini,.muted-mini{font-size:8px!important}
+      .kitchen-manual-toggle{width:100%;min-height:34px;border:1px solid #d5dde3;border-radius:4px;background:#fff;padding:6px 9px;font:inherit;font-size:9px;font-weight:800;color:#586b76;text-align:left;cursor:pointer}
+      .kitchen-manual-wrap{display:none;margin-top:5px}.kitchen-manual-wrap.open{display:block}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-box>label{display:none!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-input{height:39px!important;border:1px solid #c9d2d9!important;border-radius:4px!important;background:#fff!important;padding:0 9px!important;box-shadow:none!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-input input{height:37px!important;font-size:12px!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-results{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;margin-top:4px!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-result{min-height:48px!important;padding:7px 9px!important;border:1px solid #dfe5e9!important;border-radius:4px!important;background:#fff!important;box-shadow:none!important;text-align:left!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-search-result strong{font-size:11px!important}.kitchen-search-result small{font-size:8px!important}.dietary-mini,.muted-mini{font-size:8px!important}
 
-      #kitchenWorkspace.kitchen-ux .kitchen-person-panel{margin:0!important;padding:0!important;border:1px solid #d5dde3!important;border-radius:7px!important;background:#fff!important;box-shadow:none!important;overflow:hidden!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-person-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:13px 15px!important;border-bottom:1px solid #e2e8ec!important;background:#f8fafb!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-person-head h2{margin:2px 0!important;font-size:22px!important;color:#182d3a!important}.kitchen-person-head p{margin:2px 0 0!important;font-size:10px!important;color:#70808b!important}
-      .kitchen-ux-next{min-height:36px;border:1px solid #c3ced6;background:#fff;border-radius:4px;padding:7px 10px;font:inherit;font-size:10px;font-weight:850;color:#40545f;cursor:pointer}.kitchen-ux-next:hover{background:#eef3f6}
-      #kitchenWorkspace.kitchen-ux .dietary-alert{display:flex!important;align-items:flex-start!important;gap:12px!important;margin:12px 14px 0!important;padding:14px!important;border:2px solid #d49a23!important;border-radius:6px!important;background:#fff7dc!important;color:#674d08!important}
-      #kitchenWorkspace.kitchen-ux .dietary-alert strong{display:block!important;font-size:14px!important;text-transform:uppercase!important}.dietary-alert span,.dietary-alert div{font-size:11px!important;line-height:1.4!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-tickets{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;padding:14px!important}
-      #kitchenWorkspace.kitchen-ux .meal-ticket{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;align-content:start!important;min-height:190px!important;margin:0!important;padding:14px!important;border:1px solid #d7e0e6!important;border-top:5px solid #607d90!important;border-radius:6px!important;background:#fafcfd!important;box-shadow:none!important;text-align:center!important}
-      #kitchenWorkspace.kitchen-ux .meal-ticket.colazione{border-top-color:#b98520!important}.meal-ticket.pranzo{border-top-color:#287454!important}.meal-ticket.cena{border-top-color:#415c84!important}
-      #kitchenWorkspace.kitchen-ux .meal-ticket.used{opacity:.82!important;background:#f2f5f4!important;border-top-color:#6b8b78!important}
-      #kitchenWorkspace.kitchen-ux .meal-ticket-icon{display:none!important}.meal-ticket-copy small{font-size:8px!important;text-transform:uppercase!important;letter-spacing:.07em!important;color:#788791!important}.meal-ticket-copy strong{display:block!important;margin:3px 0!important;font-size:19px!important;color:#1c303d!important}.meal-ticket-copy span{display:block!important;min-height:34px!important;font-size:10px!important;line-height:1.35!important;color:#6d7e89!important}
-      #kitchenWorkspace.kitchen-ux .meal-use-button{width:100%!important;min-height:58px!important;margin-top:auto!important;border:0!important;border-radius:5px!important;background:#173b52!important;color:#fff!important;font:inherit!important;font-size:13px!important;font-weight:900!important;box-shadow:none!important;cursor:pointer!important}
-      #kitchenWorkspace.kitchen-ux .meal-use-button:hover:not(:disabled){background:#0e2c40!important}.meal-use-button:disabled{background:#d9e0e4!important;color:#75838b!important;cursor:not-allowed!important}
-      #kitchenWorkspace.kitchen-ux .kitchen-privacy-note{padding:8px 14px 12px!important;font-size:8px!important;color:#85929a!important;text-align:center!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-person-panel{margin:0!important;padding:0!important;border:1px solid #d5dde3!important;border-radius:6px!important;background:#fff!important;box-shadow:none!important;overflow:hidden!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-person-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:10px 11px!important;border-bottom:1px solid #e2e8ec!important;background:#fff!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-person-head .panel-kicker{display:none!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-person-head h2{margin:0!important;font-size:18px!important;line-height:1.1!important;color:#182d3a!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-person-head p{margin:3px 0 0!important;font-size:9px!important;color:#70808b!important}
+      .kitchen-ux-next{min-height:32px!important;border:1px solid #c8d2d9!important;background:#f7f9fa!important;border-radius:4px!important;padding:6px 8px!important;font:inherit!important;font-size:8px!important;font-weight:850!important;color:#40545f!important;white-space:nowrap!important}
+      #kitchenWorkspace.kitchen-ux .dietary-alert{display:block!important;margin:8px!important;padding:12px!important;border:2px solid #c88a08!important;border-radius:5px!important;background:#fff3c9!important;color:#5e4708!important;text-align:center!important}
+      #kitchenWorkspace.kitchen-ux .dietary-alert strong{display:block!important;font-size:13px!important;text-transform:uppercase!important;line-height:1.15!important}
+      #kitchenWorkspace.kitchen-ux .dietary-alert span{display:block!important;margin-top:4px!important;font-size:11px!important;line-height:1.3!important;font-weight:700!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-tickets{display:grid!important;grid-template-columns:1fr!important;gap:5px!important;padding:8px!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket{display:grid!important;grid-template-columns:minmax(0,1fr) 118px!important;gap:8px!important;align-items:center!important;min-height:68px!important;margin:0!important;padding:8px 9px!important;border:1px solid #dce3e7!important;border-left:4px solid #607d90!important;border-radius:5px!important;background:#fafcfd!important;box-shadow:none!important;text-align:left!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket.colazione{border-left-color:#b98520!important}.meal-ticket.pranzo{border-left-color:#287454!important}.meal-ticket.cena{border-left-color:#415c84!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket.used{background:#f0f4f2!important;border-left-color:#6b8b78!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket-icon{display:none!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket-copy small{display:none!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket-copy strong{display:block!important;margin:0!important;font-size:15px!important;color:#1c303d!important}
+      #kitchenWorkspace.kitchen-ux .meal-ticket-copy span{display:block!important;margin-top:3px!important;font-size:8px!important;line-height:1.25!important;color:#6d7e89!important}
+      #kitchenWorkspace.kitchen-ux .meal-use-button{width:100%!important;min-height:48px!important;margin:0!important;border:0!important;border-radius:4px!important;background:#173b52!important;color:#fff!important;font:inherit!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important;cursor:pointer!important}
+      #kitchenWorkspace.kitchen-ux .meal-use-button:disabled{background:#dce2e5!important;color:#75828a!important}
+      #kitchenWorkspace.kitchen-ux .kitchen-privacy-note{display:none!important}
 
-      @media(max-width:900px){.kitchen-ux-scan-zone{grid-template-columns:1fr}.kitchen-ux-help{display:none}.kitchen-search-results{grid-template-columns:1fr!important}}
-      @media(max-width:700px){#kitchenWorkspace.kitchen-ux .kitchen-head{align-items:flex-start!important;flex-direction:column!important}.meal-dashboard{grid-template-columns:1fr!important}.meal-summary-card{border-right:0!important;border-bottom:1px solid #e3e8ec!important}.meal-summary-card:last-child{border-bottom:0!important}#kitchenWorkspace.kitchen-ux .kitchen-tickets{grid-template-columns:1fr!important}.meal-ticket{min-height:140px!important}}
+      .kitchen-bottom-scan{position:fixed;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;width:min(calc(100% - 20px),560px);height:58px;border:0;border-radius:7px;background:#173b52;color:#fff;font:inherit;font-size:14px;font-weight:900;box-shadow:0 8px 24px rgba(20,44,60,.22)}
+      .kitchen-bottom-scan span{font-size:19px;margin-right:7px}
+
+      @media(min-width:700px){
+        #kitchenWorkspace.kitchen-ux{padding-top:12px!important}
+        .kitchen-bottom-scan{position:sticky;left:auto;bottom:10px;transform:none;width:100%;margin-top:8px}
+      }
     `;
     document.head.appendChild(style);
+  }
+
+  function stationName() {
+    return sessionStorage.getItem('campo_scuola_segreteria_postazione') || 'Cucina';
+  }
+
+  function buildStationLine() {
+    const workspace = $('kitchenWorkspace');
+    const head = workspace?.querySelector('.kitchen-head');
+    if (!workspace || !head || $('kitchenMobileStation')) return;
+    const line = document.createElement('div');
+    line.id = 'kitchenMobileStation';
+    line.className = 'kitchen-mobile-station';
+    line.innerHTML = `<div><span>Postazione attiva</span><strong id="kitchenMobileStationName">${stationName()}</strong></div><button type="button" id="kitchenChangeStation">Cambia</button>`;
+    head.insertAdjacentElement('afterend', line);
+    $('kitchenChangeStation')?.addEventListener('click', () => $('stationBadge')?.click());
   }
 
   function buildScanZone() {
@@ -73,14 +119,40 @@
     const zone = document.createElement('div');
     zone.id = 'kitchenUxScanZone';
     zone.className = 'kitchen-ux-scan-zone';
-    zone.innerHTML = `
-      <button id="kitchenUxScan" class="kitchen-ux-scan-primary" type="button">
-        <span class="icon">▣</span>
-        <span><strong>Scansiona QR</strong><span>Inquadra il QR sul badge, verifica la persona e registra il pasto con un click.</span></span>
-      </button>
-      <div class="kitchen-ux-help"><strong>Modalità servizio</strong><span>La ricerca manuale resta disponibile sotto come alternativa. I ticket già utilizzati non possono essere consumati una seconda volta.</span></div>`;
+    zone.innerHTML = `<button id="kitchenUxScan" class="kitchen-ux-scan-primary" type="button"><span class="icon">▣</span><span><strong>SCANSIONA QR</strong><span class="scan-sub">Badge volontario</span></span></button>`;
     tools.insertAdjacentElement('beforebegin', zone);
     $('kitchenUxScan')?.addEventListener('click', () => $('kitchenScanButton')?.click());
+  }
+
+  function wrapManualSearch() {
+    const tools = $('kitchenWorkspace')?.querySelector('.kitchen-tools');
+    const box = tools?.querySelector('.kitchen-search-box');
+    if (!tools || !box || $('kitchenManualToggle')) return;
+    const toggle = document.createElement('button');
+    toggle.id = 'kitchenManualToggle';
+    toggle.className = 'kitchen-manual-toggle';
+    toggle.type = 'button';
+    toggle.textContent = '⌕ Ricerca manuale';
+    const wrap = document.createElement('div');
+    wrap.id = 'kitchenManualWrap';
+    wrap.className = 'kitchen-manual-wrap';
+    box.parentNode.insertBefore(toggle, box);
+    wrap.appendChild(box);
+    tools.appendChild(wrap);
+    toggle.addEventListener('click', () => {
+      wrap.classList.toggle('open');
+      toggle.textContent = wrap.classList.contains('open') ? '× Chiudi ricerca manuale' : '⌕ Ricerca manuale';
+      if (wrap.classList.contains('open')) setTimeout(() => $('kitchenSearch')?.focus(), 30);
+    });
+  }
+
+  function resetForNext() {
+    const panel = $('kitchenPersonPanel');
+    if (panel) panel.hidden = true;
+    if ($('kitchenSearch')) $('kitchenSearch').value = '';
+    if ($('kitchenSearchResults')) $('kitchenSearchResults').innerHTML = '';
+    $('kitchenManualWrap')?.classList.remove('open');
+    if ($('kitchenManualToggle')) $('kitchenManualToggle').textContent = '⌕ Ricerca manuale';
   }
 
   function addNextButton() {
@@ -90,36 +162,51 @@
     button.id = 'kitchenUxNext';
     button.type = 'button';
     button.className = 'kitchen-ux-next';
-    button.textContent = 'Nuova scansione';
-    button.addEventListener('click', () => {
-      const panel = $('kitchenPersonPanel');
-      if (panel) panel.hidden = true;
-      if ($('kitchenSearch')) $('kitchenSearch').value = '';
-      if ($('kitchenSearchResults')) $('kitchenSearchResults').innerHTML = '';
-      setTimeout(() => $('kitchenUxScan')?.focus(), 20);
-    });
+    button.textContent = 'Nuovo';
+    button.addEventListener('click', resetForNext);
     head.appendChild(button);
+  }
+
+  function addBottomScanner() {
+    const workspace = $('kitchenWorkspace');
+    if (!workspace || $('kitchenBottomScan')) return;
+    const button = document.createElement('button');
+    button.id = 'kitchenBottomScan';
+    button.type = 'button';
+    button.className = 'kitchen-bottom-scan';
+    button.innerHTML = '<span>▣</span> NUOVA SCANSIONE';
+    button.addEventListener('click', () => { resetForNext(); $('kitchenScanButton')?.click(); });
+    workspace.appendChild(button);
+  }
+
+  function updateStationLabel() {
+    const label = $('kitchenMobileStationName');
+    if (label) label.textContent = stationName();
   }
 
   function polish() {
     const workspace = $('kitchenWorkspace');
     if (!workspace) return;
     workspace.classList.add('kitchen-ux');
-    const title = workspace.querySelector('.kitchen-head p');
-    if (title) title.textContent = 'Scansione rapida dei badge, ticket pasti ed esigenze alimentari.';
+    const title = workspace.querySelector('.kitchen-head h1');
+    if (title) title.textContent = 'Cucina';
+    buildStationLine();
     buildScanZone();
+    wrapManualSearch();
     addNextButton();
+    addBottomScanner();
+    updateStationLabel();
   }
 
   async function init() {
     injectStyles();
-    for (let i = 0; i < 120; i += 1) {
-      if ($('kitchenWorkspace')) {
+    for (let i = 0; i < 140; i += 1) {
+      const workspace = $('kitchenWorkspace');
+      if (workspace) {
         polish();
-        observer = new MutationObserver(() => {
-          if (!$('kitchenWorkspace')?.hidden) setTimeout(() => { buildScanZone(); addNextButton(); }, 20);
-        });
-        observer.observe($('kitchenWorkspace'), { attributes:true, childList:true, subtree:true, attributeFilter:['hidden'] });
+        observer = new MutationObserver(() => { if (!workspace.hidden) setTimeout(polish, 20); });
+        observer.observe(workspace, { attributes:true, childList:true, subtree:true, attributeFilter:['hidden'] });
+        window.addEventListener('campo:station-changed', updateStationLabel);
         return;
       }
       await new Promise(resolve => setTimeout(resolve, 50));
