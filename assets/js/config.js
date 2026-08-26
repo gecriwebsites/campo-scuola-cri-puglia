@@ -73,6 +73,7 @@ window.CAMPO_CONFIG = {
     'assets/js/mezzi-segreteria.js',
     'assets/js/mezzi-ux-v1.js',
     'assets/js/situazione-campo.js',
+    'assets/js/situazione-dashboard-ux-v1.js',
     'assets/js/import-excel-segreteria.js',
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
