@@ -7,8 +7,6 @@
   let accommodation = null;
   let currentPersonId = null;
   let modalObserver = null;
-  let domObserver = null;
-  let rendering = false;
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 
@@ -75,32 +73,26 @@
   }
 
   function renderAccommodation() {
-    if (rendering) return;
-    rendering = true;
-    try {
-      const grid = $('accQuickGrid');
-      if (grid) {
-        let box = $('accQuickAccommodation');
-        if (!box) {
-          box = document.createElement('div');
-          box.id = 'accQuickAccommodation';
-          box.className = 'acc-quick-accommodation';
-          box.innerHTML = '<div class="acc-quick-accommodation-icon">⌂</div><div><span>Alloggio assegnato</span><strong id="accQuickAccommodationValue">—</strong><small id="accQuickAccommodationMeta"></small></div>';
-          const course = $('accQuickCourse');
-          if (course?.parentElement === grid) course.insertAdjacentElement('afterend', box);
-          else grid.appendChild(box);
-        }
-        if ($('accQuickAccommodationValue')) $('accQuickAccommodationValue').textContent = accommodationLabel();
-        if ($('accQuickAccommodationMeta')) {
-          $('accQuickAccommodationMeta').textContent = accommodation
-            ? `${accommodation.tentName}${accommodation.emergency ? ' · posto emergenza' : ''} — comunicalo al volontario durante l’accredito.`
-            : 'Da assegnare prima dell’arrivo, se è previsto il pernottamento.';
-        }
+    const grid = $('accQuickGrid');
+    if (grid) {
+      let box = $('accQuickAccommodation');
+      if (!box) {
+        box = document.createElement('div');
+        box.id = 'accQuickAccommodation';
+        box.className = 'acc-quick-accommodation';
+        box.innerHTML = '<div class="acc-quick-accommodation-icon">⌂</div><div><span>Alloggio assegnato</span><strong id="accQuickAccommodationValue">—</strong><small id="accQuickAccommodationMeta"></small></div>';
+        const course = $('accQuickCourse');
+        if (course?.parentElement === grid) course.insertAdjacentElement('afterend', box);
+        else grid.appendChild(box);
       }
-      ensureSummaryItem();
-    } finally {
-      rendering = false;
+      const value = accommodationLabel();
+      const meta = accommodation
+        ? `${accommodation.tentName}${accommodation.emergency ? ' · posto emergenza' : ''} — comunicalo al volontario durante l’accredito.`
+        : 'Da assegnare prima dell’arrivo, se è previsto il pernottamento.';
+      if ($('accQuickAccommodationValue')?.textContent !== value) $('accQuickAccommodationValue').textContent = value;
+      if ($('accQuickAccommodationMeta')?.textContent !== meta) $('accQuickAccommodationMeta').textContent = meta;
     }
+    ensureSummaryItem();
   }
 
   function ensureSummaryItem() {
@@ -113,7 +105,8 @@
       item.className = 'acc-quick-summary-item accommodation';
       body.insertBefore(item, body.firstChild);
     }
-    item.innerHTML = `<span>Alloggio assegnato</span><strong>${esc(accommodationLabel())}</strong>`;
+    const html = `<span>Alloggio assegnato</span><strong>${esc(accommodationLabel())}</strong>`;
+    if (item.innerHTML !== html) item.innerHTML = html;
   }
 
   function qrImageData() {
@@ -175,17 +168,15 @@
     if (!modal) return;
 
     modalObserver = new MutationObserver(() => {
-      if (!modal.hidden) setTimeout(loadAccommodation, 70);
+      if (!modal.hidden) setTimeout(loadAccommodation, 90);
       else { accommodation = null; currentPersonId = null; }
     });
     modalObserver.observe(modal, { attributes:true, attributeFilter:['hidden'] });
 
-    domObserver = new MutationObserver(() => {
-      if (!modal.hidden && modal.classList.contains('acc-quick-person')) renderAccommodation();
-    });
-    domObserver.observe(modal, { childList:true, subtree:true });
-
     document.addEventListener('click', event => {
+      const summaryToggle = event.target.closest('#accQuickSummary>button:first-child');
+      if (summaryToggle) setTimeout(ensureSummaryItem, 20);
+
       const print = event.target.closest('#accQuickPrintQr');
       if (!print) return;
       event.preventDefault();
