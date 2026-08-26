@@ -39,22 +39,34 @@
     document.head.appendChild(style);
   }
 
+  function startObserver(nav) {
+    if (observer) observer.disconnect();
+    observer = new MutationObserver(() => setTimeout(arrange, 30));
+    observer.observe(nav, { childList:true, subtree:true });
+  }
+
   function arrange() {
     if (arranging) return;
     const nav = document.querySelector('#standardWorkspace .app-nav');
     if (!nav) return;
     arranging = true;
+    if (observer) observer.disconnect();
     try {
-      [...nav.querySelectorAll('.app-nav-btn')].forEach(btn => {
+      const buttons = [...nav.querySelectorAll(':scope > .app-nav-btn')];
+      buttons.forEach(btn => {
         const label = labels[btn.dataset.view];
-        if (label) btn.textContent = label;
+        if (label && btn.textContent.trim() !== label) btn.textContent = label;
       });
-      order.forEach(view => {
-        const btn = nav.querySelector(`.app-nav-btn[data-view="${view}"]`);
-        if (btn) nav.appendChild(btn);
-      });
+
+      const refreshed = [...nav.querySelectorAll(':scope > .app-nav-btn')];
+      const ranked = order.map(view => refreshed.find(btn => btn.dataset.view === view)).filter(Boolean);
+      const unknown = refreshed.filter(btn => !order.includes(btn.dataset.view));
+      const desired = [...ranked, ...unknown];
+      const different = desired.length === refreshed.length && desired.some((btn, index) => refreshed[index] !== btn);
+      if (different) desired.forEach(btn => nav.appendChild(btn));
     } finally {
       arranging = false;
+      startObserver(nav);
     }
   }
 
@@ -64,8 +76,8 @@
       const nav = document.querySelector('#standardWorkspace .app-nav');
       if (nav) {
         arrange();
-        observer = new MutationObserver(() => setTimeout(arrange, 20));
-        observer.observe(nav, { childList:true, subtree:true });
+        setTimeout(arrange, 500);
+        setTimeout(arrange, 1400);
         return;
       }
       await new Promise(resolve => setTimeout(resolve, 50));
