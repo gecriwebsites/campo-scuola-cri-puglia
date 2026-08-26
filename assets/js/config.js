@@ -73,7 +73,7 @@ window.CAMPO_CONFIG = {
     'assets/js/mezzi-segreteria.js',
     'assets/js/mezzi-ux-v1.js',
     'assets/js/situazione-campo.js',
-    'assets/js/situazione-dashboard-ux-v1.js',
+    'assets/js/situazione-dashboard-ux-v1.js?v=fix-loop-2',
     'assets/js/import-excel-segreteria.js',
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
@@ -86,7 +86,7 @@ window.CAMPO_CONFIG = {
     'assets/js/accreditamento-alloggio-qr.js',
     'assets/js/pasti-ux-v1.js',
     'assets/js/admin-tools.js',
-    'assets/js/navigation-ux-v1.js'
+    'assets/js/navigation-ux-v1.js?v=fix-loop-2'
   ];
 
   if (document.readyState === 'loading') {
