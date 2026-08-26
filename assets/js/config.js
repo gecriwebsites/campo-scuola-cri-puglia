@@ -73,6 +73,7 @@ window.CAMPO_CONFIG = {
     'assets/js/import-master-workbook.js',
     'assets/js/accreditamento-verifica-excel.js',
     'assets/js/persona-ux-v1.js',
+    'assets/js/persone-ux-v1.js',
     'assets/js/admin-tools.js'
   ];
 
