@@ -74,7 +74,8 @@ window.CAMPO_CONFIG = {
     'assets/js/import-excel-management.js',
     'assets/js/import-excel-finalize.js',
     'assets/js/accreditamento-verifica-excel.js',
-    'assets/js/admin-tools.js'
+    'assets/js/admin-tools.js',
+    'assets/js/ux-segreteria-v2.js'
   ];
 
   if (document.readyState === 'loading') {
