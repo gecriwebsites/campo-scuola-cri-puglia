@@ -72,6 +72,7 @@ window.CAMPO_CONFIG = {
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
     'assets/js/accreditamento-verifica-excel.js',
+    'assets/js/persona-ux-v1.js',
     'assets/js/admin-tools.js'
   ];
 
