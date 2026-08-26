@@ -69,7 +69,8 @@ window.CAMPO_CONFIG = {
     'assets/js/mezzi-segreteria.js',
     'assets/js/situazione-campo.js',
     'assets/js/import-excel-segreteria.js',
-    'assets/js/import-excel-fix.js'
+    'assets/js/import-excel-fix.js',
+    'assets/js/import-excel-timeout-fix.js'
   ];
 
   if (document.readyState === 'loading') {
