@@ -16,6 +16,9 @@
 
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
   const norm = value => String(value || '').trim().toLocaleLowerCase('it').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ');
+  const cfKey = value => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const phoneKey = value => String(value || '').replace(/[^0-9]/g, '');
+  const emailKey = value => String(value || '').trim().toLocaleLowerCase('it');
   const getStation = () => sessionStorage.getItem(STATION_STORAGE_KEY) || '';
 
   function setStatus(message, type = '') {
@@ -93,10 +96,6 @@
     return out;
   }
 
-  function cfKey(data) {
-    return String(data?.codice_fiscale || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  }
-
   async function sha256(file) {
     if (!window.crypto?.subtle) return null;
     const buffer = await file.arrayBuffer();
@@ -107,6 +106,12 @@
   async function ensureXlsx() {
     if (window.XLSX) return;
     await new Promise((resolve, reject) => {
+      const existing = [...document.scripts].find(s => /xlsx\.full\.min\.js/.test(s.src || ''));
+      if (existing) {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', () => reject(new Error('Libreria Excel non disponibile')), { once: true });
+        return;
+      }
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
       script.onload = resolve;
@@ -120,16 +125,28 @@
     return /timeout|upstream|gateway|temporar|network|fetch|connection|429|502|503|504/i.test(message);
   }
 
-  async function rpcWithRetry(name, args, maxAttempts = 4) {
+  async function rpcWithRetry(name, args, maxAttempts = 3) {
     let lastError = null;
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       const { data, error } = await client.rpc(name, args);
       if (!error) return { data, error: null, attempts: attempt };
       lastError = error;
       if (!temporaryError(error) || attempt === maxAttempts) break;
-      await sleep(650 * attempt);
+      await sleep(450 * attempt);
     }
     return { data: null, error: lastError, attempts: maxAttempts };
+  }
+
+  async function queryWithRetry(factory, maxAttempts = 3) {
+    let last = null;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const result = await factory();
+      if (!result.error) return result;
+      last = result;
+      if (!temporaryError(result.error) || attempt === maxAttempts) break;
+      await sleep(450 * attempt);
+    }
+    return last || { data: null, error: new Error('Richiesta non completata') };
   }
 
   async function openPreparedImport(importId) {
@@ -141,8 +158,130 @@
         setTimeout(() => document.querySelector('#importRowsBody')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
         return;
       }
-      await sleep(150);
+      await sleep(120);
     }
+  }
+
+  function personView(person) {
+    return {
+      persona_id: person.id,
+      nome: person.nome,
+      cognome: person.cognome,
+      codice_fiscale: person.codice_fiscale,
+      email: person.email,
+      telefono: person.telefono,
+      comitato: person.comitato,
+      attivo: person.attivo
+    };
+  }
+
+  function buildPeopleIndexes(people) {
+    const byCf = new Map();
+    const byEmail = new Map();
+    const byPhone = new Map();
+    const byName = new Map();
+
+    const add = (map, key, person) => {
+      if (!key) return;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(person);
+    };
+
+    people.forEach(person => {
+      add(byCf, cfKey(person.codice_fiscale), person);
+      add(byEmail, emailKey(person.email), person);
+      add(byPhone, phoneKey(person.telefono), person);
+      const nk = `${norm(person.nome)}|${norm(person.cognome)}`;
+      if (nk !== '|') add(byName, nk, person);
+    });
+
+    return { byCf, byEmail, byPhone, byName };
+  }
+
+  function uniquePeople(items) {
+    const map = new Map();
+    items.forEach(person => { if (person?.id) map.set(person.id, person); });
+    return [...map.values()];
+  }
+
+  function analyzeLocally(data, profile, indexes, warnings = []) {
+    const errors = [];
+    const name = String(data.nome || '').trim();
+    const surname = String(data.cognome || '').trim();
+
+    if (['staff','discenti','docenti'].includes(profile) && (!name || !surname)) {
+      errors.push({ campo: 'anagrafica', messaggio: 'Nome e cognome sono obbligatori' });
+    }
+
+    if (errors.length) {
+      return {
+        esito: 'errore',
+        azione_proposta: 'errore',
+        persona_id: null,
+        metodo_match: null,
+        match_info: {},
+        errori: errors,
+        avvisi: warnings
+      };
+    }
+
+    const cf = cfKey(data.codice_fiscale);
+    if (cf) {
+      const cfMatches = indexes.byCf.get(cf) || [];
+      if (cfMatches.length === 1) {
+        return {
+          esito: 'duplicata',
+          azione_proposta: 'aggiorna_persona',
+          persona_id: cfMatches[0].id,
+          metodo_match: 'codice_fiscale',
+          match_info: { status: 'persona_esistente', metodo: 'codice_fiscale', persona_id: cfMatches[0].id, candidati: cfMatches.map(personView) },
+          errori: [],
+          avvisi: warnings
+        };
+      }
+      if (cfMatches.length > 1) {
+        return {
+          esito: 'da_validare',
+          azione_proposta: 'possibile_duplicato',
+          persona_id: null,
+          metodo_match: 'codice_fiscale_multiplo',
+          match_info: { status: 'possibile_duplicato', metodo: 'codice_fiscale_multiplo', candidati: cfMatches.slice(0, 10).map(personView) },
+          errori: [],
+          avvisi: [...warnings, { tipo: 'possibile_duplicato', messaggio: 'Verificare la possibile corrispondenza con una persona già presente' }]
+        };
+      }
+    }
+
+    const weak = [];
+    const email = emailKey(data.email);
+    const phone = phoneKey(data.telefono);
+    const nameKey = `${norm(name)}|${norm(surname)}`;
+    if (email) weak.push(...(indexes.byEmail.get(email) || []));
+    if (phone) weak.push(...(indexes.byPhone.get(phone) || []));
+    if (name && surname) weak.push(...(indexes.byName.get(nameKey) || []));
+    const candidates = uniquePeople(weak).slice(0, 10);
+
+    if (candidates.length) {
+      return {
+        esito: 'da_validare',
+        azione_proposta: 'possibile_duplicato',
+        persona_id: null,
+        metodo_match: 'dati_anagrafici',
+        match_info: { status: 'possibile_duplicato', metodo: 'dati_anagrafici', candidati: candidates.map(personView) },
+        errori: [],
+        avvisi: [...warnings, { tipo: 'possibile_duplicato', messaggio: 'Verificare la possibile corrispondenza con una persona già presente' }]
+      };
+    }
+
+    return {
+      esito: 'valida',
+      azione_proposta: 'nuova_persona',
+      persona_id: null,
+      metodo_match: 'nessuna_corrispondenza',
+      match_info: { status: 'nuova_persona', metodo: 'nessuna_corrispondenza', candidati: [] },
+      errori: [],
+      avvisi: warnings
+    };
   }
 
   async function robustAnalyze() {
@@ -167,7 +306,7 @@
     try {
       await ensureXlsx();
       setStatus('Preparazione del file…', 'working');
-      setProgress('Lettura Excel…', 4);
+      setProgress('Lettura Excel…', 5);
 
       const buffer = await file.arrayBuffer();
       const workbook = window.XLSX.read(buffer, { type: 'array', cellDates: true });
@@ -182,8 +321,8 @@
       const hash = await sha256(file).catch(() => null);
       const extension = (file.name.split('.').pop() || 'xlsx').toLowerCase();
 
-      setStatus(`Analisi protetta di ${rows.length} righe: invio sequenziale per evitare timeout.`, 'working');
-      setProgress('Creazione / recupero sessione di staging…', 7);
+      setStatus(`Analisi rapida di ${rows.length} righe: confronto locale e salvataggio in blocco.`, 'working');
+      setProgress('Creazione / recupero sessione…', 10);
 
       const created = await rpcWithRetry('crea_importazione_excel', {
         p_nome_file: file.name,
@@ -203,6 +342,14 @@
         throw new Error(`Sessione di staging non disponibile (${created.data?.status || 'errore'}).`);
       }
 
+      const importStateResult = await queryWithRetry(() => client.from('importazioni').select('stato').eq('id', importId).maybeSingle());
+      if (importStateResult.error) throw importStateResult.error;
+      if (['importazione','completata','completata_con_errori'].includes(importStateResult.data?.stato)) {
+        setStatus('Questo file è già stato consolidato nel gestionale e non può essere rianalizzato. Apro lo storico esistente.', 'warning');
+        await openPreparedImport(importId);
+        return;
+      }
+
       const mapped = await rpcWithRetry('imposta_mapping_importazione', {
         p_importazione_id: importId,
         p_mapping_colonne: mapping,
@@ -211,56 +358,93 @@
       });
       if (mapped.error) throw mapped.error;
 
+      setProgress('Caricamento indice anagrafico…', 20);
+      const peopleResult = await queryWithRetry(() => client.from('persone')
+        .select('id,nome,cognome,codice_fiscale,email,telefono,comitato,attivo')
+        .eq('attivo', true)
+        .limit(5000));
+      if (peopleResult.error) throw peopleResult.error;
+
+      const indexes = buildPeopleIndexes(peopleResult.data || []);
       const normalized = rows.map(row => normalizeRow(row, mapping, profile));
       const cfCounts = new Map();
       normalized.forEach(data => {
-        const cf = cfKey(data);
+        const cf = cfKey(data.codice_fiscale);
         if (cf) cfCounts.set(cf, (cfCounts.get(cf) || 0) + 1);
       });
 
-      const failures = [];
-      let retriesUsed = 0;
-
-      for (let index = 0; index < rows.length; index += 1) {
+      setProgress('Analisi locale delle righe…', 35);
+      const now = new Date().toISOString();
+      const stagedRows = rows.map((row, index) => {
         const data = normalized[index];
-        const cf = cfKey(data);
+        const cf = cfKey(data.codice_fiscale);
         const warnings = [];
         if (cf && (cfCounts.get(cf) || 0) > 1) {
           warnings.push({ tipo: 'cf_ripetuto_file', messaggio: `Codice fiscale presente ${cfCounts.get(cf)} volte nel foglio: le righe verranno consolidate nella fase di importazione effettiva.` });
         }
+        const analysis = analyzeLocally(data, profile, indexes, warnings);
+        return {
+          importazione_id: importId,
+          nome_foglio: sheetName || 'Foglio1',
+          numero_riga: index + 2,
+          dati_originali: row || {},
+          dati_normalizzati: data || {},
+          codice_fiscale: cf || null,
+          persona_id: analysis.persona_id,
+          errori: analysis.errori,
+          avvisi: analysis.avvisi,
+          match_info: analysis.match_info,
+          esito: analysis.esito,
+          azione_proposta: analysis.azione_proposta,
+          metodo_match: analysis.metodo_match,
+          confermato_manualmente: false,
+          risolto_at: null,
+          risolto_da: null,
+          updated_at: now
+        };
+      });
 
-        const pct = 10 + ((index + 1) / rows.length) * 84;
-        setProgress(`Analisi riga ${index + 1} / ${rows.length}…`, pct);
-
-        const saved = await rpcWithRetry('salva_riga_importazione', {
-          p_importazione_id: importId,
-          p_nome_foglio: sheetName,
-          p_numero_riga: index + 2,
-          p_dati_originali: rows[index],
-          p_dati_normalizzati: data,
-          p_errori: [],
-          p_avvisi: warnings
-        }, 5);
-
-        if (saved.attempts > 1) retriesUsed += saved.attempts - 1;
-        if (saved.error || saved.data?.status !== 'analizzata') {
-          failures.push({ row: index + 2, error: saved.error?.message || saved.data?.status || 'errore sconosciuto' });
-        }
-
-        // Evita picchi di richieste sul piano Free/PostgREST.
-        await sleep(260);
+      setProgress(`Salvataggio rapido di ${stagedRows.length} righe…`, 55);
+      const chunkSize = 100;
+      for (let start = 0; start < stagedRows.length; start += chunkSize) {
+        const chunk = stagedRows.slice(start, start + chunkSize);
+        const saved = await queryWithRetry(() => client.from('importazioni_righe').upsert(chunk, {
+          onConflict: 'importazione_id,nome_foglio,numero_riga'
+        }), 4);
+        if (saved.error) throw saved.error;
+        const done = Math.min(start + chunk.length, stagedRows.length);
+        setProgress(`Salvate ${done} / ${stagedRows.length} righe…`, 55 + (done / stagedRows.length) * 30);
       }
 
-      setProgress('Caricamento anteprima…', 98);
+      const counts = { valida: 0, duplicata: 0, da_validare: 0, errore: 0, ignorata: 0, importata: 0 };
+      stagedRows.forEach(row => { if (Object.prototype.hasOwnProperty.call(counts, row.esito)) counts[row.esito] += 1; });
+      const state = counts.da_validare > 0 || counts.errore > 0 ? 'validazione' : 'pronta';
+
+      setProgress('Aggiornamento riepilogo…', 90);
+      const updated = await queryWithRetry(() => client.from('importazioni').update({
+        mapping_colonne: mapping,
+        profilo: profile,
+        postazione: getStation() || null,
+        righe_totali: stagedRows.length,
+        righe_valide: counts.valida,
+        righe_duplicate: counts.duplicata,
+        righe_errore: counts.errore,
+        righe_importate: counts.importata,
+        stato: state,
+        validata_at: state === 'pronta' ? now : null,
+        validata_da: state === 'pronta' ? (await client.auth.getUser()).data?.user?.id || null : null,
+        updated_at: now
+      }).eq('id', importId), 3);
+      if (updated.error) throw updated.error;
+
+      setProgress('Caricamento anteprima…', 96);
       await openPreparedImport(importId);
 
-      if (failures.length) {
-        const first = failures[0];
-        setStatus(`Anteprima aggiornata: ${rows.length - failures.length}/${rows.length} righe elaborate. ${failures.length} da riprovare (prima: riga ${first.row}, ${first.error}). Premi di nuovo “Analizza” per ritentare: le righe già salvate non verranno duplicate.`, 'warning');
-      } else {
-        const retryText = retriesUsed ? ` Sono stati recuperati automaticamente ${retriesUsed} timeout temporanei.` : '';
-        setStatus(`Anteprima pronta: ${rows.length} righe elaborate correttamente.${retryText} Nessun dato operativo è stato ancora importato.`, 'success');
-      }
+      const notes = [];
+      if (counts.duplicata) notes.push(`${counts.duplicata} già presenti`);
+      if (counts.da_validare) notes.push(`${counts.da_validare} da verificare`);
+      if (counts.errore) notes.push(`${counts.errore} errori`);
+      setStatus(`Anteprima pronta: ${stagedRows.length} righe analizzate e salvate in blocco${notes.length ? ` · ${notes.join(' · ')}` : ''}. Nessun dato operativo è stato ancora importato.`, counts.errore ? 'warning' : 'success');
       setProgress('Anteprima aggiornata.', 100);
     } catch (error) {
       setStatus(`Analisi non riuscita: ${error?.message || error}`, 'error');
