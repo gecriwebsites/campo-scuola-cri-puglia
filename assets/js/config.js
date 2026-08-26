@@ -80,7 +80,10 @@ window.CAMPO_CONFIG = {
     'assets/js/persone-table-responsive-fix.js',
     'assets/js/accreditamento-ux-v1.js',
     'assets/js/accreditamento-persona-ux-v2.js',
-    'assets/js/admin-tools.js'
+    'assets/js/accreditamento-alloggio-qr.js',
+    'assets/js/pasti-ux-v1.js',
+    'assets/js/admin-tools.js',
+    'assets/js/navigation-ux-v1.js'
   ];
 
   if (document.readyState === 'loading') {
