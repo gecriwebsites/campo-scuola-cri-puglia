@@ -74,6 +74,8 @@ window.CAMPO_CONFIG = {
     'assets/js/accreditamento-verifica-excel.js',
     'assets/js/persona-ux-v1.js',
     'assets/js/persone-ux-v1.js',
+    'assets/js/persone-table-responsive-fix.js',
+    'assets/js/accreditamento-ux-v1.js',
     'assets/js/admin-tools.js'
   ];
 
