@@ -54,7 +54,6 @@
       #personModal.person-ux .person-ux-pernotto span{display:flex!important;flex-direction:column!important;gap:2px!important}
       #personModal.person-ux .person-ux-pernotto b{font-size:12px!important}.person-ux-pernotto small{font-size:10px!important;color:#71808b!important}
 
-      /* Colonna destra realmente interna alla scheda */
       #personModal.person-ux .accredit-side.person-ux-side{position:sticky!important;top:102px!important;display:block!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;align-self:start!important}
       #personModal.person-ux .person-ux-side-card{background:#fff;border:1px solid #d7dee4;border-radius:7px;padding:13px;margin-bottom:10px}
       #personModal.person-ux .accredit-side-head{margin:0!important;padding:0 0 9px!important;border-bottom:1px solid #e7ecef!important}
@@ -76,7 +75,6 @@
       #personModal.person-ux .qr-card-head{margin-bottom:9px!important}.qr-card-head h4{font-size:13px!important;margin:2px 0!important}.qr-card-head small{font-size:9px!important}.qr-card-head .row-action{font-size:10px!important;padding:6px 8px!important;border-radius:4px!important}
       #personModal.person-ux .qr-preview{display:grid!important;grid-template-columns:104px minmax(0,1fr)!important;gap:10px!important;align-items:center!important}.qr-box{width:104px!important;min-height:104px!important}.qr-box canvas,.qr-box img{max-width:100%!important;height:auto!important}.qr-meta{font-size:9px!important;line-height:1.35!important;color:#73818c!important}
 
-      /* Verifica import in sidebar: leggibile ma non dominante */
       #personModal.person-ux #excelVerifyPanel{width:100%!important;max-width:none!important;margin:0 0 10px!important;border:1px solid #d7dee4!important;border-radius:7px!important;background:#fff!important;overflow:hidden!important;box-shadow:none!important}
       #personModal.person-ux #excelVerifyPanel .excel-verify-panel-head{padding:11px 12px!important;background:#fff!important;border-bottom:1px solid #e7ecef!important}
       #personModal.person-ux #excelVerifyPanel .excel-verify-panel-head h4{font-size:13px!important;margin:2px 0!important}.excel-verify-panel-head p{font-size:9px!important;line-height:1.3!important}
@@ -91,7 +89,6 @@
       #personModal.person-ux #excelVerifyPanel .excel-verify-note{font-size:10px!important;min-height:52px!important;border-radius:4px!important}.excel-verify-button{font-size:9px!important;padding:6px 7px!important;border-radius:4px!important}
       #personModal.person-ux .person-verify-toggle{width:calc(100% - 20px);margin:0 10px 10px;border:1px solid #d8e0e6;border-radius:4px;background:#f7f9fa;padding:7px 9px;font:inherit;font-size:9px;font-weight:800;color:#4a5e6d;cursor:pointer}
 
-      /* Footer azioni: unico punto di salvataggio */
       #personModal.person-ux .person-ux-actions{position:sticky;bottom:0;z-index:25;grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;background:rgba(255,255,255,.97);border:1px solid #d7dee4;border-radius:7px;box-shadow:0 -5px 18px rgba(24,38,49,.06);backdrop-filter:blur(8px)}
       #personModal.person-ux .person-ux-actions-left{min-width:0}.person-ux-actions-left .form-message{margin:0!important;min-height:0!important;font-size:10px!important}
       #personModal.person-ux .person-ux-actions-right{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
@@ -99,7 +96,6 @@
       #personModal.person-ux .person-ux-close{border:1px solid #cbd4db;background:#fff;color:#40535f}
       #personModal.person-ux .danger-zone{margin:10px 0 0!important;padding:9px 0 0!important;border-top:1px solid #e7ecef!important}.danger-button{width:100%!important;border-radius:4px!important;font-size:9px!important;padding:7px!important;background:#fff!important;color:#a02a3c!important;border:1px solid #efcbd1!important}
 
-      /* Rimuove involucri rimasti vuoti dalla vecchia impaginazione */
       #personModal.person-ux .person-form>.form-section-title,#personModal.person-ux .person-form>.form-grid,#personModal.person-ux .person-form>label,#personModal.person-ux .person-form>.switch-grid,#personModal.person-ux .person-form>.qr-card,#personModal.person-ux .person-form>.course-chips,#personModal.person-ux .person-form>.person-save-row,#personModal.person-ux .person-form>.danger-zone,#personModal.person-ux .person-form>.form-message{display:none!important}
       #personModal.person-ux .person-ux-main .form-grid,#personModal.person-ux .person-ux-main label,#personModal.person-ux .person-ux-main .switch-grid,#personModal.person-ux .person-ux-side label,#personModal.person-ux .person-ux-side .switch-row,#personModal.person-ux .person-ux-side .qr-card,#personModal.person-ux .person-ux-actions .form-message{display:block!important}
       #personModal.person-ux .person-ux-side .switch-row{display:flex!important}
@@ -122,13 +118,8 @@
     document.head.appendChild(style);
   }
 
-  function labelFor(id) {
-    return $(id)?.closest('label') || null;
-  }
-
-  function switchFor(id) {
-    return $(id)?.closest('.switch-row') || $(id)?.closest('label') || null;
-  }
+  function labelFor(id) { return $(id)?.closest('label') || null; }
+  function switchFor(id) { return $(id)?.closest('.switch-row') || $(id)?.closest('label') || null; }
 
   function section(id, title, subtitle) {
     const el = document.createElement('section');
@@ -247,12 +238,20 @@
     requestAnimationFrame(() => {
       const side = document.querySelector('#personModal .accredit-side');
       if (!side) { reorderBusy = false; return; }
-      const operational = $('personUxOperationalCard');
-      const accredito = $('personUxAccreditoGroup');
-      const qr = side.querySelector('.qr-card');
-      const verify = $('excelVerifyPanel');
-      const danger = side.querySelector('.danger-zone');
-      [operational, accredito, qr, verify, danger].forEach(node => { if (node && node.parentElement === side) side.appendChild(node); });
+      const desired = [
+        $('personUxOperationalCard'),
+        $('personUxAccreditoGroup'),
+        side.querySelector('.qr-card'),
+        $('excelVerifyPanel'),
+        side.querySelector('.danger-zone')
+      ].filter(node => node && node.parentElement === side);
+      const current = [...side.children].filter(node => desired.includes(node));
+      const alreadyOrdered = current.length === desired.length && desired.every((node, index) => current[index] === node);
+      if (!alreadyOrdered) {
+        sidebarObserver?.disconnect();
+        desired.forEach(node => side.appendChild(node));
+        sidebarObserver?.observe(side, { childList:true, subtree:false });
+      }
       enhanceVerification();
       reorderBusy = false;
     });
@@ -346,7 +345,6 @@
     const danger = $('deletePersonButton')?.closest('.danger-zone');
     if (danger) side.appendChild(danger);
 
-    // Rimuove contenitori della vecchia impaginazione rimasti completamente vuoti.
     [...form.children].forEach(node => {
       if (node === main || node === side || node.id === 'personUxActions' || node.matches('input[type=hidden]')) return;
       if ((node.classList.contains('form-grid') || node.classList.contains('switch-grid') || node.classList.contains('form-section-title')) && !node.querySelector('input,select,textarea,button,[id]')) node.remove();
