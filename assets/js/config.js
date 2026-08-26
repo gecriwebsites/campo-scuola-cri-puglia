@@ -79,7 +79,8 @@ window.CAMPO_CONFIG = {
     'assets/js/ux-segreteria-v3.js',
     'assets/js/accreditamento-verifica-editor.js',
     'assets/js/accreditamento-verifica-nav-fix.js',
-    'assets/js/accreditamento-wizard-v4.js'
+    'assets/js/accreditamento-wizard-v4.js',
+    'assets/js/accreditamento-semplice-v5.js'
   ];
 
   if (document.readyState === 'loading') {
