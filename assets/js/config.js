@@ -64,12 +64,14 @@ window.CAMPO_CONFIG = {
   document.head.appendChild(style);
 
   const sources = [
+    'assets/js/cucina-ux-v1.js',
     'assets/js/pernottamenti-segreteria.js',
     'assets/js/pernottamenti-ux-v1.js',
     'assets/js/turni-segreteria.js',
     'assets/js/turni-ux-v1.js',
     'assets/js/turni-stati-rapidi.js',
     'assets/js/mezzi-segreteria.js',
+    'assets/js/mezzi-ux-v1.js',
     'assets/js/situazione-campo.js',
     'assets/js/import-excel-segreteria.js',
     'assets/js/supabase-rpc-catch-fix.js',
