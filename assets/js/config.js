@@ -79,7 +79,7 @@ window.CAMPO_CONFIG = {
     'assets/js/import-master-workbook.js',
     'assets/js/accreditamento-verifica-excel.js',
     'assets/js/persona-ux-v1.js',
-    'assets/js/persona-dietary-safe-v2.js?v=1',
+    'assets/js/persona-dietary-safe-v2.js?v=3',
     'assets/js/persone-ux-v1.js',
     'assets/js/persone-table-responsive-fix.js',
     'assets/js/accreditamento-ux-v1.js',
@@ -88,7 +88,8 @@ window.CAMPO_CONFIG = {
     'assets/js/pasti-ux-v1.js',
     'assets/js/admin-tools.js',
     'assets/js/navigation-ux-v1.js?v=fix-loop-2',
-    'assets/js/readability-safe-v2.js?v=1'
+    'assets/js/layout-wide-safe-v1.js?v=1',
+    'assets/js/readability-safe-v2.js?v=3'
   ];
 
   if (document.readyState === 'loading') {
