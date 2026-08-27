@@ -77,6 +77,7 @@ window.CAMPO_CONFIG = {
     'assets/js/import-excel-segreteria.js',
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
+    'assets/js/import-master-ux-v2.js?v=1',
     'assets/js/accreditamento-verifica-excel.js',
     'assets/js/persona-ux-v1.js',
     'assets/js/persona-dietary-safe-v2.js?v=3',
@@ -87,6 +88,7 @@ window.CAMPO_CONFIG = {
     'assets/js/accreditamento-alloggio-qr.js',
     'assets/js/pasti-ux-v1.js',
     'assets/js/admin-tools.js',
+    'assets/js/admin-tools-ux-v2.js?v=1',
     'assets/js/navigation-ux-v1.js?v=fix-loop-2',
     'assets/js/layout-wide-safe-v1.js?v=1',
     'assets/js/readability-safe-v2.js?v=3'
