@@ -108,6 +108,7 @@ window.CAMPO_CONFIG = {
     'assets/js/admin-diagnostics-v1.js?v=1',
     'assets/js/realtime-collaudo-v1.js?v=1',
     'assets/js/admin-readiness-v1.js?v=1',
+    'assets/js/giornata-operativa-v1.js?v=1',
     'assets/js/navigation-ux-v1.js?v=fix-loop-2',
     'assets/js/layout-wide-safe-v1.js?v=1',
     'assets/js/readability-safe-v2.js?v=3'
