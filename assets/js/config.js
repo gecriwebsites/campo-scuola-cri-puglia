@@ -111,6 +111,7 @@ window.CAMPO_CONFIG = {
     'assets/js/giornata-operativa-v1.js?v=1',
     'assets/js/giornata-operativa-controls-v1.js?v=1',
     'assets/js/coordinamento-operativo-v1.js?v=1',
+    'assets/js/report-giornaliero-v1.js?v=1',
     'assets/js/navigation-ux-v1.js?v=coord-1',
     'assets/js/layout-wide-safe-v1.js?v=1',
     'assets/js/readability-safe-v2.js?v=3'
