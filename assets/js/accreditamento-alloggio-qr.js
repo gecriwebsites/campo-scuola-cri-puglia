@@ -120,6 +120,11 @@
   }
 
   async function printSticker() {
+    if (window.CampoQrLabels?.printCurrent) {
+      await window.CampoQrLabels.printCurrent();
+      return;
+    }
+
     if (String($('personId')?.value || '') !== String(currentPersonId || '')) await loadAccommodation();
     const src = qrImageData();
     if (!src) {
