@@ -106,6 +106,7 @@ window.CAMPO_CONFIG = {
     'assets/js/pasti-ux-v1.js',
     'assets/js/admin-tools.js',
     'assets/js/admin-tools-ux-v2.js?v=1',
+    'assets/js/admin-reset-pre-campo-v1.js?v=1',
     'assets/js/admin-backup-v1.js?v=3',
     'assets/js/admin-diagnostics-v1.js?v=3',
     'assets/js/realtime-collaudo-v1.js?v=1',
