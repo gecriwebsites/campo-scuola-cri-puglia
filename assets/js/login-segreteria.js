@@ -19,7 +19,7 @@
 
   function setBusy(busy) {
     loginButton.disabled = busy;
-    loginButton.textContent = busy ? 'Accesso in corso…' : "Accedi all'Area Segreteria";
+    loginButton.textContent = busy ? 'Accesso in corso…' : "Accedi all'Area Riservata";
   }
 
   async function isAuthorized(session) {
@@ -38,7 +38,7 @@
     const authorized = await isAuthorized(session);
     if (!authorized) {
       await client.auth.signOut({ scope: 'local' });
-      setMessage('Questo account non è autorizzato ad accedere all’Area Segreteria.', 'error');
+      setMessage('Questo account non è autorizzato ad accedere all’Area Riservata.', 'error');
       return false;
     }
 
@@ -89,14 +89,11 @@
       }
     });
 
-    // Entrare nella pagina di login significa iniziare un NUOVO accesso.
-    // Eliminiamo solo la sessione locale di questo browser/tab: le altre
-    // postazioni già collegate con lo stesso account non vengono disconnesse.
+    // Entrare nella pagina di login significa iniziare un nuovo accesso locale.
+    // Le altre postazioni che usano lo stesso account restano collegate.
     try {
       await client.auth.signOut({ scope: 'local' });
-    } catch (_) {
-      // Nessuna sessione locale attiva: possiamo mostrare normalmente il login.
-    }
+    } catch (_) {}
 
     sessionStorage.removeItem(STATION_STORAGE_KEY);
     loginEmail.value = '';
