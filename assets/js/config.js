@@ -92,6 +92,7 @@ window.CAMPO_CONFIG = {
     'assets/js/import-excel-segreteria.js',
     'assets/js/supabase-rpc-catch-fix.js',
     'assets/js/import-master-workbook.js',
+    'assets/js/import-master-dietary-v1.js?v=1',
     'assets/js/import-master-ux-v2.js?v=1',
     'assets/js/accreditamento-verifica-excel.js',
     'assets/js/persona-ux-v1.js',
