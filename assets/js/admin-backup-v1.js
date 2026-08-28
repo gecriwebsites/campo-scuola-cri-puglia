@@ -12,7 +12,7 @@
     'servizi_pasto', 'persone_pasti', 'esigenze_alimentari', 'mezzi',
     'attivazioni_mezzi', 'autisti_mezzi', 'movimenti_mezzi',
     'verifiche_accreditamento_persona', 'importazioni', 'importazioni_righe',
-    'giornate_operative', 'criticita_operative', 'passaggi_consegne', 'log_attivita'
+    'giornate_operative', 'criticita_operative', 'passaggi_consegne', 'stampe_qr', 'log_attivita'
   ];
 
   function injectStyles() {
@@ -42,7 +42,7 @@
     box.className = 'admin-backup';
     box.innerHTML = `
       <div class="admin-backup-head">
-        <div><h3>Backup operativo</h3><p>Esporta in un unico file JSON i dati operativi accessibili all'Amministratore, compresi giornata operativa, criticità e passaggi consegne. Nessun dato viene modificato.</p></div>
+        <div><h3>Backup operativo</h3><p>Esporta in un unico file JSON i dati operativi accessibili all'Amministratore, compresi giornata operativa, criticità, passaggi consegne e storico stampe QR. Nessun dato viene modificato.</p></div>
         <button id="adminBackupRun" class="admin-backup-btn" type="button">Esporta backup</button>
       </div>
       <div id="adminBackupState" class="admin-backup-state">Il file può essere conservato come copia tecnica prima di importazioni o modifiche importanti.</div>`;
