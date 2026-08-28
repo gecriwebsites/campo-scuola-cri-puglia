@@ -12,6 +12,44 @@
     document.head.appendChild(marker);
   }
 
+  function ensureImportMasterCard(workspace) {
+    const cards = [...workspace.querySelectorAll('[data-view-panel="dashboard"] .module-card')];
+    let card = cards.find(item => {
+      const label = item.querySelector('strong')?.textContent?.trim();
+      return label === 'Importa Excel' || label === 'Import Master';
+    });
+    if (!card) return;
+
+    // Il vecchio HTML aveva questa voce come semplice <article>, quindi non poteva essere cliccata.
+    // La trasformiamo in un vero pulsante senza duplicare il modulo di importazione.
+    if (card.tagName !== 'BUTTON') {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `${card.className} module-button active-module`;
+      button.innerHTML = card.innerHTML;
+      button.dataset.openView = 'import-excel';
+      card.replaceWith(button);
+      card = button;
+    } else {
+      card.type = 'button';
+      card.classList.add('module-button', 'active-module');
+      card.dataset.openView = 'import-excel';
+    }
+
+    if (card.dataset.importMasterBound !== '1') {
+      card.dataset.importMasterBound = '1';
+      card.addEventListener('click', () => {
+        const navButton = workspace.querySelector('.app-nav-btn[data-view="import-excel"]');
+        if (navButton) {
+          navButton.click();
+          return;
+        }
+        // Fallback se il modulo sta ancora finendo di caricarsi.
+        setTimeout(() => workspace.querySelector('.app-nav-btn[data-view="import-excel"]')?.click(), 120);
+      });
+    }
+  }
+
   function polish() {
     const workspace = $('standardWorkspace');
     if (!workspace) return false;
@@ -44,6 +82,7 @@
       if (status && ['Da attivare', 'In sviluppo'].includes(status.textContent.trim())) status.textContent = 'Operativo';
     });
 
+    ensureImportMasterCard(workspace);
     return true;
   }
 
