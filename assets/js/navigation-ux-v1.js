@@ -14,9 +14,10 @@
     mezzi: 'Mezzi',
     situazione: 'Situazione',
     'situazione-campo': 'Situazione',
+    coordinamento: 'Coordinamento',
     'import-excel': 'Import Master'
   };
-  const order = ['dashboard','persone','accreditamento','turni','pernottamenti','pasti','mezzi','situazione','situazione-campo','import-excel'];
+  const order = ['dashboard','persone','accreditamento','turni','pernottamenti','pasti','mezzi','situazione','situazione-campo','coordinamento','import-excel'];
 
   function injectStyles() {
     if ($('navigationUxV1Styles')) return;
