@@ -74,7 +74,7 @@ window.CAMPO_CONFIG = {
   }
 
   const style = document.createElement('style');
-  style.textContent = '.app-nav{max-width:100%;overflow-x:auto;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav-btn{flex:0 0 auto}';
+  style.textContent = '.app-nav{max-width:100%;overflow-x:auto;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav-btn{flex:0 0 auto}#personModal.acc-quick-person .person-ux-side .person-ux-side-card.person-ux-operational-card{display:none!important}';
   document.head.appendChild(style);
 
   const sources = [
@@ -101,7 +101,7 @@ window.CAMPO_CONFIG = {
     'assets/js/persone-table-responsive-fix.js',
     'assets/js/accreditamento-ux-v1.js',
     'assets/js/accreditamento-persona-ux-v2.js',
-    'assets/js/accreditamento-flusso-v2.js?v=1',
+    'assets/js/accreditamento-flusso-v2.js?v=2',
     'assets/js/accreditamento-alloggio-qr.js?v=2',
     'assets/js/qr-etichette-verticali-v2.js?v=1',
     'assets/js/persona-close-fast-v1.js?v=1',
