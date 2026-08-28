@@ -66,6 +66,7 @@
       ['Area Riservata Operativa', 'standardWorkspace'],
       ['Scheda persona', 'personModal'],
       ['Accredito', 'accreditList'],
+      ['Stampa QR massiva', 'qrBulkButton'],
       ['Turni', 'shiftView'],
       ['Alloggi', 'overnightView'],
       ['Pasti', 'mealPersonList'],
@@ -81,7 +82,7 @@
 
     const tables = [
       'persone','turni','tende','posti_letto','servizi_pasto','persone_pasti','mezzi',
-      'giornate_operative','criticita_operative','passaggi_consegne'
+      'giornate_operative','criticita_operative','passaggi_consegne','stampe_qr'
     ];
     for (const table of tables) {
       const test = await safeTable(table);
