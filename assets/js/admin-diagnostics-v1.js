@@ -11,10 +11,10 @@
     style.id = 'adminDiagnosticsV1Styles';
     style.textContent = `
       .admin-diagnostics{margin:12px 18px 0;padding:14px;border:1px solid #d7e1e7;border-radius:6px;background:#fff}
-      .admin-diagnostics-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.admin-diagnostics-head h3{margin:0;font-size:16px;color:#233946}.admin-diagnostics-head p{margin:3px 0 0;font-size:12px;color:#6d7d87;line-height:1.4}
-      .admin-diagnostics-run{min-height:40px;border:0;border-radius:5px;background:#173b52;color:#fff;padding:8px 12px;font:inherit;font-size:12px;font-weight:850;cursor:pointer;white-space:nowrap}.admin-diagnostics-run:disabled{opacity:.5;cursor:not-allowed}
-      .admin-diagnostics-list{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:11px}.admin-diagnostic-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:8px 9px;border:1px solid #e1e6ea;border-radius:4px;background:#fafbfc}.admin-diagnostic-row strong{font-size:11px;color:#344955}.admin-diagnostic-row span{font-size:10px;font-weight:850;white-space:nowrap}.admin-diagnostic-row.ok span{color:#16794f}.admin-diagnostic-row.error{border-color:#ecc8cd;background:#fff8f9}.admin-diagnostic-row.error span{color:#a0001d}.admin-diagnostic-row.wait span{color:#7a6a33}
-      .admin-diagnostics-note{margin-top:8px;font-size:11px;line-height:1.4;color:#70808a}
+      .admin-diagnostics-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.admin-diagnostics-head h3{margin:0;font-size:17px;color:#233946}.admin-diagnostics-head p{margin:3px 0 0;font-size:13px;color:#6d7d87;line-height:1.45}
+      .admin-diagnostics-run{min-height:42px;border:0;border-radius:5px;background:#173b52;color:#fff;padding:8px 13px;font:inherit;font-size:13px;font-weight:850;cursor:pointer;white-space:nowrap}.admin-diagnostics-run:disabled{opacity:.5;cursor:not-allowed}
+      .admin-diagnostics-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}.admin-diagnostic-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:9px 10px;border:1px solid #e1e6ea;border-radius:4px;background:#fafbfc}.admin-diagnostic-row strong{font-size:12px;line-height:1.4;color:#344955}.admin-diagnostic-row span{font-size:11px;font-weight:850;white-space:nowrap}.admin-diagnostic-row.ok span{color:#16794f}.admin-diagnostic-row.error{border-color:#ecc8cd;background:#fff8f9}.admin-diagnostic-row.error span{color:#a0001d}.admin-diagnostic-row.wait span{color:#7a6a33}
+      .admin-diagnostics-note{margin-top:8px;font-size:12px;line-height:1.45;color:#70808a}
       @media(max-width:720px){.admin-diagnostics-head{align-items:flex-start;flex-direction:column}.admin-diagnostics-list{grid-template-columns:1fr}.admin-diagnostics-run{width:100%}}
     `;
     document.head.appendChild(style);
@@ -32,7 +32,7 @@
     box.id = 'adminDiagnostics';
     box.className = 'admin-diagnostics';
     box.innerHTML = `
-      <div class="admin-diagnostics-head"><div><h3>Diagnostica gestionale</h3><p>Controllo in sola lettura di interfaccia, database e funzioni principali.</p></div><button id="adminDiagnosticsRun" class="admin-diagnostics-run" type="button">Esegui controllo</button></div>
+      <div class="admin-diagnostics-head"><div><h3>Diagnostica gestionale</h3><p>Controllo in sola lettura di interfaccia, database e funzioni principali dell'Area Riservata Operativa.</p></div><button id="adminDiagnosticsRun" class="admin-diagnostics-run" type="button">Esegui controllo</button></div>
       <div id="adminDiagnosticsList" class="admin-diagnostics-list"><div class="admin-diagnostics-note">Nessun controllo eseguito.</div></div>
       <div class="admin-diagnostics-note">La diagnostica non crea, modifica o elimina dati.</div>`;
     danger.insertAdjacentElement('beforebegin', box);
@@ -63,12 +63,26 @@
     if (list) list.innerHTML = row('Avvio diagnostica','ATTESA');
 
     const frontend = [
-      ['Area Segreteria', 'standardWorkspace'], ['Scheda persona', 'personModal'], ['Turni', 'shiftView'], ['Alloggi', 'overnightView'],
-      ['Mezzi', 'vehicleView'], ['Situazione Campo', 'situationView'], ['Import Master', 'masterWorkbookPanel'], ['Area Cucina', 'kitchenWorkspace']
+      ['Area Riservata Operativa', 'standardWorkspace'],
+      ['Scheda persona', 'personModal'],
+      ['Accredito', 'accreditList'],
+      ['Turni', 'shiftView'],
+      ['Alloggi', 'overnightView'],
+      ['Pasti', 'mealPersonList'],
+      ['Mezzi', 'vehicleView'],
+      ['Situazione Campo', 'situationView'],
+      ['Coordinamento', 'coordinationView'],
+      ['Report giornaliero', 'coordDailyReport'],
+      ['Gestione giornata', 'dailyOpsAdmin'],
+      ['Import Master', 'masterWorkbookPanel'],
+      ['Area Cucina', 'kitchenWorkspace']
     ];
     const results = frontend.map(([label,id]) => ({ label:`UI · ${label}`, ok:!!$(id), detail:$(id) ? 'caricato' : 'non trovato' }));
 
-    const tables = ['persone','turni','tende','posti_letto','servizi_pasto','persone_pasti','mezzi'];
+    const tables = [
+      'persone','turni','tende','posti_letto','servizi_pasto','persone_pasti','mezzi',
+      'giornate_operative','criticita_operative','passaggi_consegne'
+    ];
     for (const table of tables) {
       const test = await safeTable(table);
       results.push({ label:`DB · ${table}`, ...test });
@@ -79,7 +93,7 @@
     const resetPreview = await safeRpc('anteprima_reset_gestionale', {});
     results.push({ label:'RPC · Anteprima reset', ...resetPreview });
 
-    if (list) list.innerHTML = results.map(item => row(item.label, item.ok ? 'OK' : 'ERRORE', item.ok ? item.detail : String(item.detail || '').slice(0,80))).join('');
+    if (list) list.innerHTML = results.map(item => row(item.label, item.ok ? 'OK' : 'ERRORE', item.ok ? item.detail : String(item.detail || '').slice(0,100))).join('');
     const errors = results.filter(item => !item.ok).length;
     if (button) { button.disabled = false; button.textContent = errors ? `Ripeti controllo (${errors} errori)` : 'Ripeti controllo'; }
     running = false;
@@ -93,7 +107,7 @@
     if (error || !session) return;
     const { data, error:profileError } = await client.from('utenti_segreteria').select('ruolo,attivo').eq('user_id', session.user.id).maybeSingle();
     if (profileError || !data?.attivo || data.ruolo !== 'admin') return;
-    for (let i=0;i<50;i+=1) {
+    for (let i=0;i<60;i+=1) {
       if (mount()) return;
       await new Promise(resolve => setTimeout(resolve,100));
     }
