@@ -285,7 +285,7 @@
 
   async function recordPrint(rows,type,layout) {
     if (!trackingAvailable || !rows.length) return;
-    const payload = rows.map(p => ({persona_id:p.id,tipo,formato:'70x45',postazione:station() || null,created_by:session.user.id,dettagli:{layout}}));
+    const payload = rows.map(p => ({persona_id:p.id,tipo:type,formato:'70x45',postazione:station() || null,created_by:session.user.id,dettagli:{layout}}));
     const { error } = await client.from('stampe_qr').insert(payload);
     if (error) { trackingAvailable = false; return; }
     const now = new Date().toISOString();
@@ -339,10 +339,7 @@
       roles:selectedRoles.length ? selectedRoles : roleNames(person)
     };
     const printPerson = {...person,nome:overrides.nome,cognome:overrides.cognome,numero_badge:overrides.numero_badge};
-    const originalBuild = buildItem;
     const prepared = buildItem(printPerson,overrides);
-    // prepareAndPrint usa buildItem: aggiorniamo temporaneamente i dati visibili nel record senza toccare il DB.
-    Object.assign(printPerson,{_printOverrides:prepared});
     const popup = window.open('','_blank','width=520,height=560');
     if (!popup) { toast('Il browser ha bloccato la finestra di stampa.','error'); return; }
     popup.document.write('<!doctype html><title>Preparazione QR…</title><body style="font-family:Arial;padding:30px">Preparazione etichetta QR…</body>'); popup.document.close();
