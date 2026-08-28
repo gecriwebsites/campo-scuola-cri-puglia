@@ -80,6 +80,7 @@ window.CAMPO_CONFIG = {
   const sources = [
     'assets/js/cucina-ux-v1.js',
     'assets/js/pernottamenti-segreteria.js',
+    'assets/js/production-polish-v1.js?v=1',
     'assets/js/pernottamenti-ux-v1.js',
     'assets/js/turni-segreteria.js',
     'assets/js/turni-ux-v1.js',
@@ -105,7 +106,7 @@ window.CAMPO_CONFIG = {
     'assets/js/admin-tools.js',
     'assets/js/admin-tools-ux-v2.js?v=1',
     'assets/js/admin-backup-v1.js?v=2',
-    'assets/js/admin-diagnostics-v1.js?v=1',
+    'assets/js/admin-diagnostics-v1.js?v=2',
     'assets/js/realtime-collaudo-v1.js?v=1',
     'assets/js/admin-readiness-v1.js?v=1',
     'assets/js/giornata-operativa-v1.js?v=1',
