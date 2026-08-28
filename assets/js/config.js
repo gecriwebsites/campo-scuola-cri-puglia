@@ -101,6 +101,7 @@ window.CAMPO_CONFIG = {
     'assets/js/accreditamento-ux-v1.js',
     'assets/js/accreditamento-persona-ux-v2.js',
     'assets/js/accreditamento-alloggio-qr.js',
+    'assets/js/qr-etichette-ufficiali-v1.js?v=1',
     'assets/js/persona-close-fast-v1.js?v=1',
     'assets/js/pasti-ux-v1.js',
     'assets/js/admin-tools.js',
