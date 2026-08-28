@@ -5,10 +5,35 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#d40000">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Accesso Area Segreteria | Campo Scuola CRI Puglia</title>
-  <meta name="description" content="Accesso riservato alla Segreteria del Campo Scuola CRI Puglia 2026">
+  <title>Accesso Area Riservata | Campo Scuola CRI Puglia</title>
+  <meta name="description" content="Accesso riservato alle postazioni operative del Campo Scuola CRI Puglia 2026">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/area-segreteria.css">
+  <style>
+    .login-page .auth-layout{width:min(calc(100% - 32px),1180px)}
+    .login-page .auth-card{box-shadow:none}
+    .login-page .auth-feature-list span{border-radius:9px}
+    @media(max-width:900px){
+      .login-page .login-main{align-items:flex-start;min-height:0}
+      .login-page .auth-layout{grid-template-columns:1fr;gap:24px;padding-top:18px;padding-bottom:34px}
+      .login-page .auth-intro h1{font-size:clamp(34px,8vw,48px);margin-bottom:12px}
+      .login-page .auth-intro>p{font-size:16px;line-height:1.55}
+      .login-page .auth-feature-list{margin-top:18px;gap:8px}
+      .login-page .auth-feature-list span{font-size:13px;padding:11px 12px}
+      .login-page .auth-card{padding:22px;border-radius:12px}
+    }
+    @media(max-width:560px){
+      .login-page .reserved-topbar-inner{min-height:68px}
+      .login-page .reserved-brand img{height:46px}
+      .login-page .reserved-brand span{display:none}
+      .login-page .reserved-public-link{font-size:12px}
+      .login-page .auth-layout{width:min(calc(100% - 24px),1180px)}
+      .login-page .auth-feature-list{grid-template-columns:1fr 1fr}
+      .login-page .auth-card-head{margin-bottom:18px}
+      .login-page .field-input{height:50px;font-size:16px}
+      .login-page .auth-submit{min-height:50px;font-size:15px}
+    }
+  </style>
 </head>
 <body class="reserved-body login-page">
   <header class="reserved-topbar login-topbar">
@@ -16,7 +41,7 @@
       <a class="reserved-brand" href="index.html" aria-label="Torna al portale pubblico">
         <img src="assets/img/logo-cri-puglia.png" alt="Croce Rossa Italiana - Comitato Regionale Puglia">
         <div>
-          <strong>Area Riservata Segreteria</strong>
+          <strong>Area Riservata Operativa</strong>
           <span>Campo Scuola CRI Puglia 2026</span>
         </div>
       </a>
@@ -28,13 +53,13 @@
     <section class="container auth-layout" aria-labelledby="loginTitle">
       <div class="auth-intro">
         <div class="kicker">Accesso riservato</div>
-        <h1 id="loginTitle">Segreteria del Campo</h1>
-        <p>Accedi con le credenziali autorizzate per entrare nell'area operativa condivisa della Segreteria.</p>
+        <h1 id="loginTitle">Postazioni operative del Campo</h1>
+        <p>Accedi con le credenziali autorizzate. Dopo il login il sistema assegnerà le funzioni previste dal tuo profilo e ti farà scegliere la postazione disponibile.</p>
         <div class="auth-feature-list" aria-label="Funzioni dell'area riservata">
-          <span>● Accredito e presenze</span>
-          <span>● Gestione persone e turni</span>
-          <span>● Pernottamenti e pasti</span>
-          <span>● Mezzi e movimentazioni</span>
+          <span>● Segreteria e accredito</span>
+          <span>● Turni, alloggi e mezzi</span>
+          <span>● Pasti e situazione Campo</span>
+          <span>● Postazioni Cucina dedicate</span>
         </div>
       </div>
 
@@ -43,13 +68,13 @@
           <span class="auth-lock" aria-hidden="true">🔐</span>
           <div>
             <h2>Accedi</h2>
-            <p>La sessione resterà disponibile su questa postazione fino al logout.</p>
+            <p>Usa esclusivamente un account autorizzato per il Campo.</p>
           </div>
         </div>
 
         <form id="loginForm" novalidate>
           <label class="field-label" for="loginEmail">Email</label>
-          <input class="field-input" id="loginEmail" name="email" type="email" autocomplete="username" required>
+          <input class="field-input" id="loginEmail" name="email" type="email" autocomplete="username" inputmode="email" required>
 
           <label class="field-label" for="loginPassword">Password</label>
           <div class="password-wrap">
@@ -57,7 +82,7 @@
             <button id="togglePassword" class="password-toggle" type="button" aria-label="Mostra password">Mostra</button>
           </div>
 
-          <button id="loginButton" class="btn primary auth-submit" type="submit">Accedi all'Area Segreteria</button>
+          <button id="loginButton" class="btn primary auth-submit" type="submit">Accedi all'Area Riservata</button>
           <div id="loginMessage" class="form-message" role="status" aria-live="polite"></div>
         </form>
       </div>
@@ -66,6 +91,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/config.js"></script>
-  <script src="assets/js/login-segreteria.js"></script>
+  <script src="assets/js/login-segreteria.js?v=2"></script>
 </body>
 </html>
