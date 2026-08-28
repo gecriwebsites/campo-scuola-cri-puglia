@@ -57,7 +57,21 @@ window.CAMPO_CONFIG = {
 
 (() => {
   const workspace = document.getElementById('standardWorkspace');
-  if (!workspace) return;
+
+  // Sul portale pubblico carichiamo soltanto la rifinitura grafica dedicata.
+  // Login e Area Riservata hanno invece i propri moduli separati.
+  if (!workspace) {
+    if (document.body && !document.body.classList.contains('reserved-body')) {
+      const src = 'assets/js/public-final-ux.js?v=1';
+      if (![...document.scripts].some(script => script.getAttribute('src') === src)) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+    }
+    return;
+  }
 
   const style = document.createElement('style');
   style.textContent = '.app-nav{max-width:100%;overflow-x:auto;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav-btn{flex:0 0 auto}';
